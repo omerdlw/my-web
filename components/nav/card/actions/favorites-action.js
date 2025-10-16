@@ -1,14 +1,20 @@
 "use client"; // Bu satırı ekleyin
 
 import { useRouter } from "next/navigation";
+import { useFavorites } from "@/hooks/use-favorites";
 
 export default function FavoritesAction() {
   const router = useRouter();
+  const { selectedSection } = useFavorites();
 
   const handleClick = (e) => {
     e.stopPropagation();
     router.push("/archive");
   };
+
+  if (selectedSection === "games") {
+    return null;
+  }
 
   return (
     <div

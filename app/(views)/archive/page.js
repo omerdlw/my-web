@@ -17,7 +17,7 @@ export default function ArchivePage() {
     description: "my watched list",
     icon: "solar:archive-bold",
     href: "/archive",
-    name: "Archive",
+    name: "archive",
   };
 
   useEffect(() => {
@@ -39,6 +39,7 @@ export default function ArchivePage() {
             movieTitle
           )}`
         );
+
         const searchData = await searchRes.json();
         if (searchData.results && searchData.results.length > 0) {
           fetchedItems.push({ ...searchData.results[0], media_type: "movie" });
@@ -77,29 +78,20 @@ export default function ArchivePage() {
   return (
     <>
       <DynamicNavUpdater navItem={navItem} /> {/* Eklendi */}
-      <div className="max-w-4xl mx-auto py-8 px-4">
-        <h1 className="text-3xl font-bold mb-8">Arşiv</h1>
+      <div className="p-10">
         {items.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {items.map((item) => (
               <Link
                 href={`/archive/${item.media_type}/${item.id}`}
+                className="p-1 rounded-[30px] w-full h-auto border border-black/10 dark:border-white/10 hover:scale-[1.02] transition-transform duration-200 ease-in-out"
                 key={item.id}
-                className="bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl overflow-hidden transition-all hover:border-black/20 dark:hover:border-white/20"
               >
                 <img
                   src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
+                  className="w-full h-full object-cover rounded-[24px]"
                   alt={item.title || item.name}
-                  className="w-full h-auto object-cover"
                 />
-                <div className="p-4">
-                  <h2 className="font-bold text-lg">
-                    {item.title || item.name}
-                  </h2>
-                  <p className="text-sm opacity-75 line-clamp-3">
-                    {item.overview}
-                  </p>
-                </div>
               </Link>
             ))}
           </div>

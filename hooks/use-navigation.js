@@ -19,7 +19,11 @@ export const useNavigation = () => {
 
   const isBlogPostPage =
     pathname.startsWith("/blog/") && pathname.length > "/blog/".length;
-  const showSkeleton = isBlogPostPage && !dynamicNavItem;
+  const isArchiveDetailPage =
+    pathname.startsWith("/archive/") && pathname.split("/").length > 3;
+
+  const showSkeleton =
+    (isBlogPostPage || isArchiveDetailPage) && !dynamicNavItem;
 
   useEffect(() => {
     if (!expanded) return;
@@ -48,39 +52,70 @@ export const useNavigation = () => {
     const favoritesLink = NAVIGATION_LINKS.find(
       (link) => link.href === "/favorites"
     );
+    // --- YENİ EKLENEN KART ---
+    const archiveLink = {
+      name: "Archive",
+      href: "/archive",
+      icon: "solar:archive-bold",
+      description: "my watched list",
+    };
+    // -------------------------
 
     if (showSkeleton) {
-      return [SKELETON_ITEM, blogLink, favoritesLink, homeLink].filter(Boolean);
+      return [SKELETON_ITEM, favoritesLink, blogLink, homeLink].filter(Boolean);
     }
 
-    // Arşiv sayfası kontrolü eklendi
-    if (
-      !dynamicNavItem ||
-      pathname === "/blog" ||
-      pathname.startsWith("/archive")
-    ) {
-      if (pathname.startsWith("/archive")) {
-        const archiveItem = {
-          name: "Archive",
-          href: "/archive",
-          icon: "solar:archive-bold",
-          description: "my watched list",
-        };
-        return [archiveItem, favoritesLink, blogLink, homeLink].filter(Boolean);
+    if (dynamicNavItem) {
+      // Blog detay sayfasındaysa
+      if (isBlogPostPage) {
+        return [dynamicNavItem, blogLink, favoritesLink, homeLink].filter(
+          Boolean
+        );
       }
-      return NAVIGATION_LINKS;
+      // --- DEĞİŞİKLİK BURADA ---
+      // Arşiv detay sayfasındaysa, listeye "Archive" kartını ekle
+      if (isArchiveDetailPage) {
+        return [
+          dynamicNavItem,
+          archiveLink,
+          favoritesLink,
+          blogLink,
+          homeLink,
+        ].filter(Boolean);
+      }
+      // -------------------------
     }
 
-    return [dynamicNavItem, blogLink, favoritesLink, homeLink].filter(Boolean);
-  }, [pathname, dynamicNavItem, showSkeleton]);
+    if (pathname === "/archive") {
+      return [archiveLink, favoritesLink, blogLink, homeLink].filter(Boolean);
+    }
+
+    return NAVIGATION_LINKS;
+  }, [
+    pathname,
+    dynamicNavItem,
+    showSkeleton,
+    isBlogPostPage,
+    isArchiveDetailPage,
+  ]);
 
   const activeIndex = useMemo(() => {
     if (showSkeleton) return 0;
-    // Arşiv sayfası için activeIndex düzeltmesi
+
+    if (isBlogPostPage || isArchiveDetailPage) {
+      return 0;
+    }
+
     const currentPath = pathname.startsWith("/archive") ? "/archive" : pathname;
     const idx = navigationItems.findIndex((l) => l.href === currentPath);
     return idx >= 0 ? idx : 0;
-  }, [pathname, navigationItems, showSkeleton]);
+  }, [
+    pathname,
+    navigationItems,
+    showSkeleton,
+    isBlogPostPage,
+    isArchiveDetailPage,
+  ]);
 
   const activeItem = navigationItems[activeIndex];
   const activeItemHasAction =
