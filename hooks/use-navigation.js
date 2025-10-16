@@ -53,7 +53,21 @@ export const useNavigation = () => {
       return [SKELETON_ITEM, blogLink, favoritesLink, homeLink].filter(Boolean);
     }
 
-    if (!dynamicNavItem || pathname === "/blog") {
+    // Arşiv sayfası kontrolü eklendi
+    if (
+      !dynamicNavItem ||
+      pathname === "/blog" ||
+      pathname.startsWith("/archive")
+    ) {
+      if (pathname.startsWith("/archive")) {
+        const archiveItem = {
+          name: "Archive",
+          href: "/archive",
+          icon: "solar:archive-bold",
+          description: "my watched list",
+        };
+        return [archiveItem, favoritesLink, blogLink, homeLink].filter(Boolean);
+      }
       return NAVIGATION_LINKS;
     }
 
@@ -62,13 +76,17 @@ export const useNavigation = () => {
 
   const activeIndex = useMemo(() => {
     if (showSkeleton) return 0;
-    const idx = navigationItems.findIndex((l) => l.href === pathname);
+    // Arşiv sayfası için activeIndex düzeltmesi
+    const currentPath = pathname.startsWith("/archive") ? "/archive" : pathname;
+    const idx = navigationItems.findIndex((l) => l.href === currentPath);
     return idx >= 0 ? idx : 0;
   }, [pathname, navigationItems, showSkeleton]);
 
   const activeItem = navigationItems[activeIndex];
   const activeItemHasAction =
-    activeItem.href === "/" || activeItem.href.startsWith("/blog");
+    activeItem?.href === "/" ||
+    activeItem?.href.startsWith("/blog") ||
+    activeItem?.href === "/favorites";
 
   const navigate = (href) => {
     router.push(href);

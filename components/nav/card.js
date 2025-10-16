@@ -3,6 +3,7 @@ import PlayerAction from "./card/actions/player-action";
 import { useMemo, useState, useEffect } from "react";
 import PostAction from "./card/actions/post-action";
 import SearchAction from "./card/actions/search-action";
+import FavoritesAction from "./card/actions/favorites-action"; // Eklendi
 import { Description } from "./card/description";
 import { ANIMATION_CONFIG } from "./constants";
 import { usePathname } from "next/navigation";
@@ -34,6 +35,8 @@ function CardComponent({
     if (pathname.includes("/blog/") && link.href === pathname)
       return <PostAction />;
     if (pathname === "/blog" && link.href === "/blog") return <SearchAction />;
+    if (pathname === "/favorites" && link.href === "/favorites")
+      return <FavoritesAction />; // Eklendi
     return null;
   }, [pathname, link.href]);
 
