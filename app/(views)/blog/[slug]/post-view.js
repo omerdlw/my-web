@@ -1,0 +1,75 @@
+"use client";
+
+import { PostDataUpdater } from "@/app/(views)/blog/[slug]/post-updater";
+import Background from "@/components/blog/post/background";
+import Comment from "@/components/blog/post/comment";
+import { calculateReadingTime } from "@/lib/utils";
+import { DynamicNavUpdater } from "./nav-updater";
+import ReactMarkdown from "react-markdown";
+import remarkBreaks from "remark-breaks";
+import SplitText from "@/components/others/split-text";
+
+export default function PostView({ post }) {
+  const readingTime = calculateReadingTime(post.CONTENT);
+  const formattedDate = new Date(post.CREATED_AT).toLocaleDateString("en-US", {
+    year: "numeric",
+    day: "numeric",
+    month: "long",
+  });
+
+  const navItem = {
+    description: `${formattedDate} • ${readingTime} min read`,
+    icon: post.BANNER_BACKGROUND,
+    href: `/blog/${post.SLUG}`,
+    name: post.TITLE,
+  };
+
+  return (
+    <>
+      <PostDataUpdater post={post} />
+      <DynamicNavUpdater navItem={navItem} />
+      <Background background={post.BACKGROUND} />
+      <article className="flex flex-col max-w-5xl py-20 mx-auto px-8 space-y-10">
+        <SplitText
+          className="text-6xl font-bold text-center"
+          text={post.TITLE}
+          delay={160}
+          duration={2}
+          ease="elastic.out(1, 0.3)"
+          splitType="words"
+          from={{ opacity: 0, y: 40 }}
+          to={{ opacity: 1, y: 0 }}
+          threshold={0.1}
+          rootMargin="-100px"
+          textAlign="center"
+        />
+        <div className="text-xl leading-9 prose prose-invert">
+          <ReactMarkdown remarkPlugins={[remarkBreaks]}>
+            {post.CONTENT}
+          </ReactMarkdown>
+        </div>
+      </article>
+      <section className="max-w-4xl mx-auto flex flex-col">
+        <h2 className="text-2xl mx-auto font-bold mb-4">Comments</h2>
+        {post.COMMENTS && post.COMMENTS.length > 0 ? (
+          post.COMMENTS.map((comment, index) => {
+            const isFirst = index === 0;
+            const isLast = index === post.COMMENTS.length - 1;
+            return (
+              <Comment
+                index={index}
+                comment={comment}
+                isFirst={isFirst}
+                isLast={isLast}
+                key={index}
+              />
+            );
+          })
+        ) : (
+          <p className="mx-auto opacity-75">No comment yet</p>
+        )}
+      </section>
+      <div className="h-[260px]"></div>
+    </>
+  );
+}
