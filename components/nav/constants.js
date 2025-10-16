@@ -1,7 +1,22 @@
 export const NAVIGATION_LINKS = [
-  { name: "home", href: "/", icon: "solar:home-angle-2-bold", description: "about me & stuff" },
-  { name: "blog", href: "/blog", icon: "solar:documents-minimalistic-bold", description: "my posts" },
-  { name: "favorites", href: "/favorites", icon: "solar:medal-star-bold", description: "my favorite things" },
+  {
+    name: "home",
+    href: "/",
+    icon: "solar:home-angle-2-bold",
+    description: "about me & stuff",
+  },
+  {
+    name: "blog",
+    href: "/blog",
+    icon: "solar:documents-minimalistic-bold",
+    description: "my posts",
+  },
+  {
+    name: "favorites",
+    href: "/favorites",
+    icon: "solar:medal-star-bold",
+    description: "my favorite things",
+  },
 ];
 
 export const ANIMATION_CONFIG = {

@@ -39,9 +39,7 @@ export default function Nav() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <div
-              className="fixed w-screen h-screen inset-0 -z-10 dark:bg-gradient-to-t dark:from-black dark:via-black/40 dark:to-black/50 bg-gradient-to-t from-white via-white/40 to-white/50"
-            ></div>
+            <div className="fixed w-screen h-screen inset-0 -z-10 dark:bg-gradient-to-t dark:from-black dark:via-black/40 dark:to-black/50 bg-gradient-to-t from-white via-white/40 to-white/50"></div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -72,11 +70,17 @@ export default function Nav() {
                 <Card
                   onClick={() =>
                     !link.skeleton &&
-                    (expanded ? navigate(link.href) : isTop && setExpanded(true))
+                    (expanded
+                      ? navigate(link.href)
+                      : isTop && setExpanded(true))
                   }
                   onActionHeightChange={isTop ? setActionHeight : null}
-                  onMouseEnter={() => isTop && pathname !== '/' && setIsHovered(true)}
-                  onMouseLeave={() => isTop && pathname !== '/' && setIsHovered(false)}
+                  onMouseEnter={() =>
+                    isTop && pathname !== "/" && setIsHovered(true)
+                  }
+                  onMouseLeave={() =>
+                    isTop && pathname !== "/" && setIsHovered(false)
+                  }
                   expanded={expanded}
                   position={position}
                   key={link.href}

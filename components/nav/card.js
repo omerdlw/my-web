@@ -3,7 +3,8 @@ import PlayerAction from "./card/actions/player-action";
 import { useMemo, useState, useEffect } from "react";
 import PostAction from "./card/actions/post-action";
 import SearchAction from "./card/actions/search-action";
-import FavoritesAction from "./card/actions/favorites-action"; // Eklendi
+import FavoritesAction from "./card/actions/favorites-action";
+import ArchiveAction from "./card/actions/archive-action";
 import { Description } from "./card/description";
 import { ANIMATION_CONFIG } from "./constants";
 import { usePathname } from "next/navigation";
@@ -36,7 +37,9 @@ function CardComponent({
       return <PostAction />;
     if (pathname === "/blog" && link.href === "/blog") return <SearchAction />;
     if (pathname === "/favorites" && link.href === "/favorites")
-      return <FavoritesAction />; // Eklendi
+      return <FavoritesAction />;
+    if (pathname === "/archive" && link.href === "/archive")
+      return <ArchiveAction />;
     return null;
   }, [pathname, link.href]);
 
@@ -66,7 +69,7 @@ function CardComponent({
 
   return (
     <motion.div
-      className="absolute left-1/2 -translate-x-1/2 w-full h-auto cursor-pointer rounded-[30px] bg-white/60 dark:bg-black/20 backdrop-blur-xl border border-black/10 dark:border-white/10 p-3 transform-gpu will-change-transform"
+      className="absolute left-1/2 -translate-x-1/2 w-full h-auto cursor-pointer rounded-[30px] bg-white/80 dark:bg-black/20 backdrop-blur-lg border border-black/10 dark:border-white/10 p-3 transform-gpu will-change-transform"
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{
         opacity: 1,

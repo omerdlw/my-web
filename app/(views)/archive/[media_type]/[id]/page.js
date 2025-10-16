@@ -1,11 +1,10 @@
 "use client";
 
+import { DynamicNavUpdater } from "../../nav-updater";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Icon from "@/components/icon";
-import { DynamicNavUpdater } from "../../nav-updater"; // Nav updater'ı import ediyoruz
 
-// TMDB API anahtarınızı buraya ekleyin
 const TMDB_API_KEY =
   process.env.NEXT_PUBLIC_TMDB_API_KEY || "TMDB_API_ANAHTARINIZI_BURAYA_YAZIN";
 
@@ -39,7 +38,6 @@ export default function ArchiveDetailPage() {
     fetchDetails();
   }, [media_type, id]);
 
-  // Nav kartı için veriyi hazırlayalım
   const navItem = details
     ? {
         name: details.title || details.name,
@@ -62,11 +60,10 @@ export default function ArchiveDetailPage() {
   }
 
   if (!details) {
-    return <div>Detaylar bulunamadı veya TMDB API anahtarı hatalı.</div>;
+    return <div>Details not found or TMDB API key is incorrect.</div>;
   }
   return (
     <>
-      {/* DynamicNavUpdater'ı burada çağırıyoruz */}
       {navItem && <DynamicNavUpdater navItem={navItem} />}
       <div className="max-w-6xl mx-auto py-8 px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -99,16 +96,16 @@ export default function ArchiveDetailPage() {
             <div>
               <h2 className="text-2xl font-bold mb-3">Oyuncular</h2>
               <div className="flex flex-wrap gap-4">
-                {details.credits.cast.slice(0, 10).map((cast) => (
-                  <div key={cast.cast_id} className="text-center">
+                {details.credits.cast.slice(0, 10).map((cast, index) => (
+                  <div key={index} className="text-center">
                     <img
                       src={
                         cast.profile_path
                           ? `https://image.tmdb.org/t/p/w185${cast.profile_path}`
                           : "https://via.placeholder.com/185x278?text=No+Image"
                       }
-                      alt={cast.name}
                       className="w-24 h-24 object-cover rounded-full mx-auto"
+                      alt={cast.name}
                     />
                     <p className="text-sm mt-2">{cast.name}</p>
                     <p className="text-xs opacity-70">{cast.character}</p>

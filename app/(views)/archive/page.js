@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Icon from "@/components/icon";
 import { DynamicNavUpdater } from "./nav-updater";
+import { useArchiveContext } from "@/contexts/archive-context";
 
 const TMDB_API_KEY =
   process.env.NEXT_PUBLIC_TMDB_API_KEY || "TMDB_API_ANAHTARINIZI_BURAYA_YAZIN";
@@ -12,6 +13,7 @@ const TMDB_API_KEY =
 export default function ArchivePage() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { mediaType } = useArchiveContext();
 
   const navItem = {
     description: "my watched list",
@@ -32,29 +34,19 @@ export default function ArchivePage() {
       }
 
       const fetchedItems = [];
+      const titles = mediaType === "movie" ? ARCHIVE.movies : ARCHIVE.series;
+      const endpoint = mediaType === "movie" ? "movie" : "tv";
 
-      for (const movieTitle of ARCHIVE.movies) {
+      for (const title of titles) {
         const searchRes = await fetch(
-          `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(
-            movieTitle
+          `https://api.themoviedb.org/3/search/${endpoint}?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(
+            title
           )}`
         );
 
         const searchData = await searchRes.json();
         if (searchData.results && searchData.results.length > 0) {
-          fetchedItems.push({ ...searchData.results[0], media_type: "movie" });
-        }
-      }
-
-      for (const seriesTitle of ARCHIVE.series) {
-        const searchRes = await fetch(
-          `https://api.themoviedb.org/3/search/tv?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(
-            seriesTitle
-          )}`
-        );
-        const searchData = await searchRes.json();
-        if (searchData.results && searchData.results.length > 0) {
-          fetchedItems.push({ ...searchData.results[0], media_type: "tv" });
+          fetchedItems.push({ ...searchData.results[0], media_type: endpoint });
         }
       }
 
@@ -63,7 +55,7 @@ export default function ArchivePage() {
     };
 
     fetchArchiveData();
-  }, []);
+  }, [mediaType]);
 
   if (loading) {
     return (
@@ -77,10 +69,10 @@ export default function ArchivePage() {
 
   return (
     <>
-      <DynamicNavUpdater navItem={navItem} /> {/* Eklendi */}
+      <DynamicNavUpdater navItem={navItem} />
       <div className="p-10">
         {items.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6">
             {items.map((item) => (
               <Link
                 href={`/archive/${item.media_type}/${item.id}`}
@@ -97,8 +89,9 @@ export default function ArchivePage() {
           </div>
         ) : (
           <p>
-            Arşivde gösterilecek bir şey bulunamadı veya TMDB API anahtarı
-            hatalı.
+            There is nothing to display in the archive or the TMDB API key is
+            incorrect. There is nothing to display in the archive or the TMDB
+            API key is incorrect.
           </p>
         )}
       </div>

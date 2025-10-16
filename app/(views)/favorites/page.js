@@ -9,11 +9,11 @@ import { SERIES } from "@/data/favorites/series";
 import { GAMES } from "@/data/favorites/games";
 import { X } from "lucide-react";
 import { gsap } from "gsap";
+import { useNavigation } from "@/hooks/use-navigation";
 
 export default function Favorites() {
   const { selectedSection, direction } = useFavorites();
   const [selectedGame, setSelectedGame] = useState(null);
-
   const [currentSection, setCurrentSection] = useState(selectedSection);
   const [previousSection, setPreviousSection] = useState(null);
 

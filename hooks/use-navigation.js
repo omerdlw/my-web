@@ -4,11 +4,11 @@ import { NAVIGATION_LINKS } from "../components/nav/constants";
 import { useNavigationContext } from "@/contexts/navigation-context";
 
 const SKELETON_ITEM = {
-  name: "Yükleniyor...",
+  description: "please wait",
+  name: "loading",
   href: "loading",
-  icon: "...",
-  description: "Lütfen bekleyin",
   skeleton: true,
+  icon: "...",
 };
 
 export const useNavigation = () => {
@@ -52,28 +52,23 @@ export const useNavigation = () => {
     const favoritesLink = NAVIGATION_LINKS.find(
       (link) => link.href === "/favorites"
     );
-    // --- YENİ EKLENEN KART ---
     const archiveLink = {
       name: "Archive",
       href: "/archive",
       icon: "solar:archive-bold",
       description: "my watched list",
     };
-    // -------------------------
 
     if (showSkeleton) {
       return [SKELETON_ITEM, favoritesLink, blogLink, homeLink].filter(Boolean);
     }
 
     if (dynamicNavItem) {
-      // Blog detay sayfasındaysa
       if (isBlogPostPage) {
         return [dynamicNavItem, blogLink, favoritesLink, homeLink].filter(
           Boolean
         );
       }
-      // --- DEĞİŞİKLİK BURADA ---
-      // Arşiv detay sayfasındaysa, listeye "Archive" kartını ekle
       if (isArchiveDetailPage) {
         return [
           dynamicNavItem,
@@ -83,7 +78,6 @@ export const useNavigation = () => {
           homeLink,
         ].filter(Boolean);
       }
-      // -------------------------
     }
 
     if (pathname === "/archive") {
@@ -121,7 +115,8 @@ export const useNavigation = () => {
   const activeItemHasAction =
     activeItem?.href === "/" ||
     activeItem?.href.startsWith("/blog") ||
-    activeItem?.href === "/favorites";
+    activeItem?.href === "/favorites" ||
+    activeItem?.href === "/archive";
 
   const navigate = (href) => {
     router.push(href);

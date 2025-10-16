@@ -1,6 +1,6 @@
 export function SkeletonCard() {
   return (
-    <div className="w-full h-auto cursor-pointer rounded-[30px] bg-white/60 dark:bg-black/20 backdrop-blur-xl border border-black/10 dark:border-white/10 p-3">
+    <div className="w-[300px] h-auto cursor-pointer rounded-[30px] bg-white/80 dark:bg-black/20 border border-black/10 dark:border-white/10 p-3">
       <div className="flex items-center h-auto gap-3 animate-pulse">
         <div className="w-[52px] h-[52px] rounded-[20px] bg-black/10 dark:bg-white/10"></div>
         <div className="flex-1 flex flex-col space-y-1 overflow-hidden">

@@ -71,7 +71,7 @@ const Modal = () => {
           className={`fixed inset-0 z-50 flex ${positionClasses[position]} p-4`}
         >
           <motion.div
-            className="fixed inset-0 -z-10 bg-white/60 dark:bg-black/60"
+            className="fixed inset-0 -z-10 bg-white/80 dark:bg-black/60"
             onClick={closeModal}
             variants={backdropVariants}
             initial="hidden"

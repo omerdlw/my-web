@@ -14,7 +14,7 @@ function FormField({ id, label, as = "input", helpText, ...props }) {
       </label>
       <InputComponent
         id={id}
-        className="w-full bg-gray-800 text-white px-4 py-2 border border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        className="w-full p-4 border border-black/10 dark:border-white/10 rounded-2xl"
         {...props}
       />
       {helpText && <p className="mt-1 text-sm text-gray-400">{helpText}</p>}
@@ -85,7 +85,7 @@ export default function NewPost() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto py-8 px-4 text-white">
+    <div className="max-w-4xl mx-auto py-8 px-4">
       <h1 className="text-3xl font-bold mb-8">Yeni Blog Yazısı</h1>
       {error && (
         <div className="bg-red-900 border border-red-700 text-red-200 rounded-lg p-4 mb-6">
