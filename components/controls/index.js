@@ -1,10 +1,9 @@
 "use client";
 import { usePathname } from "next/navigation";
-import PostControls from "./post-controls";
-import FavoritesControls from "./favorites-controls";
-import HomeControls from "./home-controls";
 import Icon from "../icon";
 import { useModal } from "@/contexts/modal-context";
+import FavoritesControls from "./views/favorites-controls";
+import PostControls from "./views/post-controls";
 
 export default function Controls() {
   const pathname = usePathname();

@@ -1,8 +1,7 @@
 import { useDatabase } from "@/contexts/database-context";
 import { useModal } from "@/contexts/modal-context";
-import ControlsButton from "./button";
 import { useEffect, useState } from "react";
-import { useSettings } from "@/contexts/settings-context";
+import ControlsButton from "../button";
 
 export default function PostControls() {
   const { openModal } = useModal();

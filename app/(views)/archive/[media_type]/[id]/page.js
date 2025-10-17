@@ -1,6 +1,7 @@
 "use client";
 
-import { DynamicNavUpdater } from "../../nav-updater";
+import { DynamicNavUpdater } from "@/components/nav/updater";
+import { createNavItem } from "@/hooks/use-nav-item";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Icon from "@/components/icon";
@@ -34,14 +35,7 @@ export default function ArchiveDetailPage() {
   }, [media_type, id]);
 
   const navItem = details
-    ? {
-        name: details.title || details.name,
-        href: `/archive/${media_type}/${id}`,
-        icon: `https://image.tmdb.org/t/p/w200${details.poster_path}`,
-        description: `${new Date(
-          details.release_date || details.first_air_date
-        ).getFullYear()} • ${details.vote_average.toFixed(1)}/10`,
-      }
+    ? createNavItem("archiveDetail", { details, media_type, id })
     : null;
 
   if (loading) {
@@ -110,7 +104,7 @@ export default function ArchiveDetailPage() {
             </div>
           </div>
         </div>
-        <div className="h-[160px]"></div> {/* Alt boşluk için */}
+      <div className="h-[260px]"></div>
       </div>
     </>
   );

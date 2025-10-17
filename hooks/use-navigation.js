@@ -2,14 +2,9 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { NAVIGATION_LINKS } from "../components/nav/constants";
 import { useNavigationContext } from "@/contexts/navigation-context";
+import { createNavItem } from "./use-nav-item";
 
-const SKELETON_ITEM = {
-  description: "please wait",
-  name: "loading",
-  href: "loading",
-  skeleton: true,
-  icon: "...",
-};
+const SKELETON_ITEM = createNavItem("skeleton");
 
 export const useNavigation = () => {
   const { dynamicNavItem, expanded, setExpanded } = useNavigationContext();
@@ -52,12 +47,7 @@ export const useNavigation = () => {
     const favoritesLink = NAVIGATION_LINKS.find(
       (link) => link.href === "/favorites"
     );
-    const archiveLink = {
-      name: "Archive",
-      href: "/archive",
-      icon: "solar:archive-bold",
-      description: "my watched list",
-    };
+    const archiveLink = createNavItem("archive");
 
     if (showSkeleton) {
       return [SKELETON_ITEM, favoritesLink, blogLink, homeLink].filter(Boolean);

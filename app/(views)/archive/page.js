@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { ARCHIVE } from "@/data/archive";
 import Icon from "@/components/icon";
 import Link from "next/link";
+import { createNavItem } from "@/hooks/use-nav-item";
 
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 
@@ -13,13 +14,7 @@ export default function ArchivePage() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const { mediaType } = useArchiveContext();
-
-  const navItem = {
-    description: "my watched list",
-    icon: "solar:archive-bold",
-    href: "/archive",
-    name: "archive",
-  };
+  const navItem = createNavItem("archive");
 
   useEffect(() => {
     const fetchArchiveData = async () => {

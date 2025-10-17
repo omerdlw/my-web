@@ -162,7 +162,7 @@ export default function NewPost() {
           {isLoading ? "Kaydediliyor..." : "Kaydet"}
         </button>
       </form>
-      <div className="h-[160px]"></div>
+      <div className="h-[260px]"></div>
     </div>
   );
 }

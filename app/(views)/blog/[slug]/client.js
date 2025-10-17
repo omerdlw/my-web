@@ -9,6 +9,7 @@ import { calculateReadingTime } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
 import remarkBreaks from "remark-breaks";
 import { useEffect } from "react";
+import { createNavItem } from "@/hooks/use-nav-item";
 
 function PostDataUpdater({ post }) {
   const { setPost } = useDatabase();
@@ -25,19 +26,7 @@ function PostDataUpdater({ post }) {
 }
 
 export default function Post_Client({ post }) {
-  const readingTime = calculateReadingTime(post.CONTENT);
-  const formattedDate = new Date(post.CREATED_AT).toLocaleDateString("en-US", {
-    year: "numeric",
-    day: "numeric",
-    month: "long",
-  });
-
-  const navItem = {
-    description: `${formattedDate} • ${readingTime} min read`,
-    icon: post.BANNER_BACKGROUND,
-    href: `/blog/${post.SLUG}`,
-    name: post.TITLE,
-  };
+  const navItem = createNavItem("blogPost", { post });
 
   return (
     <>

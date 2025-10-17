@@ -2,8 +2,8 @@ import { NavigationProvider } from "@/contexts/navigation-context";
 import { FavoritesProvider } from "@/contexts/favorites-context";
 import { DatabaseProvider } from "@/contexts/database-context";
 import { SettingsProvider } from "@/contexts/settings-context";
-import { ModalProvider } from "@/contexts/modal-context";
 import { ArchiveProvider } from "@/contexts/archive-context";
+import { ModalProvider } from "@/contexts/modal-context";
 import React from "react";
 
 const providers = [

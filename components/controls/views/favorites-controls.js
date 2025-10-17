@@ -1,5 +1,5 @@
-import ControlsButton from "./button";
 import { useFavorites } from "@/hooks/use-favorites";
+import ControlsButton from "../button";
 
 export default function FavoritesControls() {
   const {
