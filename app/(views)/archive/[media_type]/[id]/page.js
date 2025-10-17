@@ -5,8 +5,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Icon from "@/components/icon";
 
-const TMDB_API_KEY =
-  process.env.NEXT_PUBLIC_TMDB_API_KEY || "TMDB_API_ANAHTARINIZI_BURAYA_YAZIN";
+const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 
 export default function ArchiveDetailPage() {
   const [details, setDetails] = useState(null);
@@ -17,18 +16,14 @@ export default function ArchiveDetailPage() {
   useEffect(() => {
     if (!media_type || !id) return;
 
-    if (
-      !TMDB_API_KEY ||
-      TMDB_API_KEY === "TMDB_API_ANAHTARINIZI_BURAYA_YAZIN"
-    ) {
-      console.error("TMDB API anahtarı eksik!");
+    if (!API_KEY) {
       setLoading(false);
       return;
     }
 
     const fetchDetails = async () => {
       const res = await fetch(
-        `https://api.themoviedb.org/3/${media_type}/${id}?api_key=${TMDB_API_KEY}&append_to_response=credits,videos,images`
+        `https://api.themoviedb.org/3/${media_type}/${id}?api_key=${API_KEY}&append_to_response=credits,videos,images`
       );
       const data = await res.json();
       setDetails(data);

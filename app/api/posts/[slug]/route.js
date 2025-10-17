@@ -8,7 +8,7 @@ export async function GET(request, { params }) {
 
     if (!post) {
       return NextResponse.json(
-        { message: "İstenen kaynak bulunamadı." },
+        { message: "Requested resource not found." },
         { status: 404 }
       );
     }
@@ -16,12 +16,12 @@ export async function GET(request, { params }) {
     return NextResponse.json(post);
   } catch (error) {
     console.error(
-      `API Hatası - Slug "${params.slug}" için post getirilemedi:`,
+      `API Error - Failed to fetch post for slug "${params.slug}":`,
       error
     );
 
     return NextResponse.json(
-      { message: "Sunucuda bir hata oluştu." },
+      { message: "A server error occurred." },
       { status: 500 }
     );
   }

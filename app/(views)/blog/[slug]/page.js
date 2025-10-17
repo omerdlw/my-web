@@ -1,6 +1,6 @@
 import { getPostBySlug } from "@/lib/db/posts";
 import { notFound } from "next/navigation";
-import PostView from "./post-view";
+import Post_Client from "./client";
 
 export default async function BlogPost({ params }) {
   const resolvedParams = await params;
@@ -12,5 +12,5 @@ export default async function BlogPost({ params }) {
     notFound();
   }
 
-  return <PostView post={post} />;
+  return <Post_Client post={post} />;
 }

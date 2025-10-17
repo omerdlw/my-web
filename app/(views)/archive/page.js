@@ -1,14 +1,13 @@
 "use client";
 
-import { ARCHIVE } from "@/data/archive";
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import Icon from "@/components/icon";
-import { DynamicNavUpdater } from "./nav-updater";
 import { useArchiveContext } from "@/contexts/archive-context";
+import { DynamicNavUpdater } from "@/components/nav/updater";
+import { useEffect, useState } from "react";
+import { ARCHIVE } from "@/data/archive";
+import Icon from "@/components/icon";
+import Link from "next/link";
 
-const TMDB_API_KEY =
-  process.env.NEXT_PUBLIC_TMDB_API_KEY || "TMDB_API_ANAHTARINIZI_BURAYA_YAZIN";
+const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 
 export default function ArchivePage() {
   const [items, setItems] = useState([]);
@@ -24,11 +23,7 @@ export default function ArchivePage() {
 
   useEffect(() => {
     const fetchArchiveData = async () => {
-      if (
-        !TMDB_API_KEY ||
-        TMDB_API_KEY === "TMDB_API_ANAHTARINIZI_BURAYA_YAZIN"
-      ) {
-        console.error("TMDB API anahtarı eksik!");
+      if (!API_KEY) {
         setLoading(false);
         return;
       }
@@ -39,7 +34,7 @@ export default function ArchivePage() {
 
       for (const title of titles) {
         const searchRes = await fetch(
-          `https://api.themoviedb.org/3/search/${endpoint}?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(
+          `https://api.themoviedb.org/3/search/${endpoint}?api_key=${API_KEY}&query=${encodeURIComponent(
             title
           )}`
         );

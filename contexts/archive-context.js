@@ -5,7 +5,7 @@ import { createContext, useContext, useState } from "react";
 const ArchiveContext = createContext();
 
 export function ArchiveProvider({ children }) {
-  const [mediaType, setMediaType] = useState("tv");
+  const [mediaType, setMediaType] = useState("movie");
 
   return (
     <ArchiveContext.Provider

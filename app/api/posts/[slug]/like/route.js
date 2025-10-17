@@ -3,14 +3,14 @@ import { NextResponse } from "next/server";
 
 export async function POST(request, { params }) {
   try {
-    const resolvedParams = await params; // Değişiklik
-    const { slug } = resolvedParams; // Değişiklik
+    const resolvedParams = await params;
+    const { slug } = resolvedParams;
 
     const { userId } = await request.json();
 
     if (!userId) {
       return NextResponse.json(
-        { message: "Kullanıcı kimliği zorunludur" },
+        { message: "User ID is required" },
         { status: 400 }
       );
     }
@@ -19,7 +19,7 @@ export async function POST(request, { params }) {
 
     if (!updatedPost) {
       return NextResponse.json(
-        { message: "Gönderi bulunamadı." },
+        { message: "Post not found." },
         { status: 404 }
       );
     }
@@ -29,9 +29,9 @@ export async function POST(request, { params }) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("API Hatası - Beğeni eklenemedi:", error);
+    console.error("API Error - Failed to add like:", error);
     return NextResponse.json(
-      { message: "Sunucuda bir hata oluştu." },
+      { message: "A server error occurred." },
       { status: 500 }
     );
   }

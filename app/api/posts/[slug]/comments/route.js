@@ -3,8 +3,8 @@ import { NextResponse } from "next/server";
 
 export async function POST(request, { params }) {
   try {
-    const resolvedParams = await params; // Değişiklik
-    const { slug } = resolvedParams; // Değişiklik
+    const resolvedParams = await params;
+    const { slug } = resolvedParams;
     const body = await request.json();
     const { author, content, avatar } = body;
 
@@ -23,16 +23,16 @@ export async function POST(request, { params }) {
 
     if (!updatedPost) {
       return NextResponse.json(
-        { message: "Gönderi bulunamadı." },
+        { message: "Post not found." },
         { status: 404 }
       );
     }
 
     return NextResponse.json(updatedPost.COMMENTS, { status: 201 });
   } catch (error) {
-    console.error("API Hatası - Yorum eklenemedi:", error);
+    console.error("API Error - Failed to add comment:", error);
     return NextResponse.json(
-      { message: "Sunucuda bir hata oluştu." },
+      { message: "A server error occurred." },
       { status: 500 }
     );
   }

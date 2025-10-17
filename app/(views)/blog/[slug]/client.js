@@ -1,15 +1,30 @@
 "use client";
 
-import { PostDataUpdater } from "@/app/(views)/blog/[slug]/post-updater";
+import { DynamicNavUpdater } from "@/components/nav/updater";
 import Background from "@/components/blog/post/background";
+import { useDatabase } from "@/contexts/database-context";
+import SplitText from "@/components/others/split-text";
 import Comment from "@/components/blog/post/comment";
 import { calculateReadingTime } from "@/lib/utils";
-import { DynamicNavUpdater } from "./nav-updater";
 import ReactMarkdown from "react-markdown";
 import remarkBreaks from "remark-breaks";
-import SplitText from "@/components/others/split-text";
+import { useEffect } from "react";
 
-export default function PostView({ post }) {
+function PostDataUpdater({ post }) {
+  const { setPost } = useDatabase();
+
+  useEffect(() => {
+    setPost(post);
+
+    return () => {
+      setPost(null);
+    };
+  }, [post, setPost]);
+
+  return null;
+}
+
+export default function Post_Client({ post }) {
   const readingTime = calculateReadingTime(post.CONTENT);
   const formattedDate = new Date(post.CREATED_AT).toLocaleDateString("en-US", {
     year: "numeric",

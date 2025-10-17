@@ -8,7 +8,7 @@ export async function POST(request) {
 
     if (!TITLE || !CONTENT || !SLUG || !CATEGORY || !AUTHOR) {
       return NextResponse.json(
-        { message: "Başlık, içerik, özet ve diğer zorunlu alanlar eksik." },
+        { message: "Title, content, summary, or other required fields are missing." },
         { status: 400 }
       );
     }
@@ -18,14 +18,14 @@ export async function POST(request) {
   } catch (error) {
     if (error instanceof SyntaxError) {
       return NextResponse.json(
-        { message: "Geçersiz istek formatı." },
+        { message: "Invalid request format." },
         { status: 400 }
       );
     }
 
-    console.error("API Hatası - Post oluşturulamadı:", error);
+    console.error("API Error - Failed to create post:", error);
     return NextResponse.json(
-      { message: "Sunucuda bir hata oluştu." },
+      { message: "A server error occurred." },
       { status: 500 }
     );
   }
