@@ -199,7 +199,7 @@ export const ARCHIVE = {
     "Game of Thrones",
     "House of the Dragon",
     "Lucifer",
-    "Money Heist",
+    "La Casa de Papel",
     "Peaky Blinders",
     "Prison Break",
     "Ragnarok",
