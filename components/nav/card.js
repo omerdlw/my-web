@@ -52,15 +52,15 @@ function CardComponent({
   if (link.skeleton) {
     return (
       <motion.div
+        exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.2 } }}
         className="absolute left-1/2 -translate-x-1/2 w-full"
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{
-          opacity: 1,
-          y: position * collapsedOffsetY,
-          scale: Math.pow(collapsedScale, position),
           zIndex: ANIMATION_CONFIG.expanded.scale - position,
+          scale: Math.pow(collapsedScale, position),
+          y: position * collapsedOffsetY,
+          opacity: 1,
         }}
-        exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.2 } }}
       >
         <SkeletonCard />
       </motion.div>
