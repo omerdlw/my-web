@@ -14,7 +14,7 @@ export default function Controls() {
       <div className="fixed bottom-4.5 left-4.5">
         <div
           onClick={() => openModal("SETTINGS_MODAL")}
-          className="w-10 h-10 center cursor-pointer rounded-full border border-black/10 dark:border-white/10"
+          className="w-14 h-14 center cursor-pointer backdrop-blur-lg rounded-full border border-black/10 dark:border-white/10"
         >
           <Icon size={20} icon={"solar:settings-bold"} />
         </div>

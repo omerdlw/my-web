@@ -45,7 +45,7 @@ const modalVariants = {
 };
 
 const Modal = () => {
-  const { isOpen, closeModal, modalType, data, position } = useModal();
+  const { isOpen, closeModal, modalType, props: data, position } = useModal();
 
   useEffect(() => {
     const handleEsc = (event) => {
@@ -79,13 +79,13 @@ const Modal = () => {
             exit="hidden"
           />
           <motion.div
-            className="relative z-10 bg-white/40 dark:bg-black/40 backdrop-blur-xl rounded-[30px] border border-black/15 dark:border-white/15 max-w-xl w-full p-3"
+            className="relative z-10 bg-white/40 dark:bg-black/40 backdrop-blur-xl rounded-[30px] border border-black/15 dark:border-white/15 p-3"
             variants={modalVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
           >
-            <SpecificModalComponent close={closeModal} {...data} />
+            <SpecificModalComponent close={closeModal} data={data} />
           </motion.div>
         </div>
       )}

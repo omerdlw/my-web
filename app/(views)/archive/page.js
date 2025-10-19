@@ -2,11 +2,12 @@
 
 import { useArchiveContext } from "@/contexts/archive-context";
 import { DynamicNavUpdater } from "@/components/nav/updater";
-import { useEffect, useState } from "react";
+import { createNavItem } from "@/hooks/use-nav-item";
+import { useEffect, useMemo, useState } from "react";
 import { ARCHIVE } from "@/data/archive";
 import Icon from "@/components/icon";
 import Link from "next/link";
-import { createNavItem } from "@/hooks/use-nav-item";
+import { useNavigationContext } from "@/contexts/navigation-context";
 
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 
@@ -14,7 +15,19 @@ export default function ArchivePage() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const { mediaType } = useArchiveContext();
-  const navItem = createNavItem("archive");
+  const navItem = useMemo(() => createNavItem("archive"), []);
+  const { searchQuery } = useNavigationContext();
+
+  const filteredItems = useMemo(() => {
+    if (!items) return [];
+    if (!searchQuery) {
+      return items;
+    }
+    const lowercasedQuery = searchQuery.toLowerCase();
+    return items.filter((item) =>
+      item.title.toLowerCase().includes(lowercasedQuery)
+    );
+  }, [items, searchQuery]);
 
   useEffect(() => {
     const fetchArchiveData = async () => {
@@ -63,28 +76,69 @@ export default function ArchivePage() {
       <div className="p-10">
         {items.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-            {items.map((item) => (
+            {filteredItems.map((item, index) => (
               <Link
                 href={`/archive/${item.media_type}/${item.id}`}
-                className="p-1 rounded-[30px] w-full h-auto border border-black/10 dark:border-white/10 hover:scale-[1.02] transition-transform duration-200 ease-in-out"
+                className="group p-1 rounded-[30px] w-full h-auto border border-black/10 dark:border-white/10 hover:scale-[1.05] hover:shadow-2xl hover:border-black/20 dark:hover:border-white/20 transition-all duration-300 ease-out animate-fade-in-up"
+                style={{
+                  animationDelay: `${index * 50}ms`,
+                  animationFillMode: "backwards",
+                }}
                 key={item.id}
               >
-                <img
-                  src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
-                  className="w-full h-full object-cover rounded-[24px]"
-                  alt={item.title || item.name}
-                />
+                <div className="relative overflow-hidden rounded-[24px]">
+                  <img
+                    src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
+                    className="w-full h-full object-cover rounded-[24px] group-hover:scale-110 transition-transform duration-500 ease-out"
+                    alt={item.title || item.name}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-[24px]" />
+                  <div className="absolute bottom-0 left-0 right-0 p-4 text-white font-semibold text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-2 group-hover:translate-y-0">
+                    {item.title || item.name}
+                  </div>
+                </div>
               </Link>
             ))}
           </div>
         ) : (
-          <p>
-            There is nothing to display in the archive or the TMDB API key is
-            incorrect. There is nothing to display in the archive or the TMDB
-            API key is incorrect.
-          </p>
+          <div className="text-center py-20 animate-fade-in">
+            <p className="text-lg text-gray-600 dark:text-gray-400">
+              There is nothing to display in the archive or the TMDB API key is
+              incorrect.
+            </p>
+          </div>
         )}
       </div>
+
+      <style jsx global>{`
+        @keyframes fade-in-up {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes fade-in {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+        .animate-fade-in-up {
+          animation: fade-in-up 0.6s ease-out;
+        }
+
+        .animate-fade-in {
+          animation: fade-in 0.5s ease-out;
+        }
+      `}</style>
     </>
   );
 }

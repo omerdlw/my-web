@@ -17,8 +17,8 @@ export const ModalProvider = ({ children }) => {
     setModalState({
       isOpen: true,
       modalType,
-      props,
       position,
+      props,
     });
   };
 
