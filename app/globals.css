@@ -3,18 +3,56 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 * {
-  box-sizing: border-box;
-  outline: none;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+    box-sizing: border-box;
+    outline: none;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
 *::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
 
 .center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+:root {
+    --color-primary: 217 91% 60%; /* Mavi tonu */
+    --color-secondary: 212 92% 45%; /* Daha koyu mavi */
+    --color-accent: 34 97% 64%; /* Vurgu için turuncu */
+    --color-text-base: 220 13% 7%; /* Koyu metin */
+    --color-text-muted: 220 9% 46%; /* Açık metin */
+    --color-bg-base: 0 0% 100%; /* Beyaz arkaplan */
+    --color-bg-muted: 220 14% 96%; /* Açık gri arkaplan */
+    --color-border: 220 13% 91%; /* Kenarlık rengi */
+    --color-success: 145 63% 42%; /* Yeşil */
+    --color-error: 0 72% 51%; /* Kırmızı */
+    --color-warning: 39 98% 55%; /* Turuncu/Sarı */
+    --color-info: 217 91% 60%; /* Ana Mavi (varsayılan info) */
+    --color-success-muted: 145 63% 95%;
+    --color-error-muted: 0 72% 97%;
+    --color-warning-muted: 39 98% 96%;
+    --color-info-muted: 217 91% 96%;
+}
+
+.dark {
+    --color-primary: 217 91% 60%;
+    --color-secondary: 212 92% 45%;
+    --color-accent: 34 97% 64%;
+    --color-text-base: 220 14% 96%; /* Açık metin */
+    --color-text-muted: 220 9% 46%; /* Koyu gri metin */
+    --color-bg-base: 224 71% 4%; /* Koyu arkaplan */
+    --color-bg-muted: 223 47% 11%; /* Daha açık koyu arkaplan */
+    --color-border: 215 28% 17%; /* Koyu kenarlık */
+    --color-success: 145 63% 55%; /* Daha parlak yeşil */
+    --color-error: 0 72% 65%; /* Daha parlak kırmızı */
+    --color-warning: 39 98% 65%; /* Daha parlak turuncu/sarı */
+    --color-info: 217 91% 70%; /* Daha parlak mavi */
+    --color-success-muted: 145 50% 15%; /* Koyu yeşil arka plan */
+    --color-error-muted: 0 60% 18%; /* Koyu kırmızı arka plan */
+    --color-warning-muted: 39 70% 20%; /* Koyu turuncu arka plan */
+    --color-info-muted: 217 50% 20%; /* Koyu mavi arka plan */
 }

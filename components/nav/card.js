@@ -69,7 +69,7 @@ function CardComponent({
 
   return (
     <motion.div
-      className="absolute left-1/2 -translate-x-1/2 w-full h-auto cursor-pointer rounded-[30px] bg-white/80 dark:bg-black/40 backdrop-blur-lg border-2 border-black/10 dark:border-white/10 p-3 transform-gpu will-change-transform"
+      className="absolute left-1/2 -translate-x-1/2 w-full h-auto cursor-pointer rounded-[30px] bg-white/80 dark:bg-black/40 backdrop-blur-lg border-2 border-skin-base dark:border-skin-base p-3 transform-gpu will-change-transform"
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{
         opacity: 1,
