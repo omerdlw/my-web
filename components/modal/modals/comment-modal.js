@@ -23,6 +23,7 @@ export default function Comment_Modal({ close }) {
   const [content, setContent] = useState("");
   const [author, setAuthor] = useState("");
   const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const { post } = useDatabase();
   const router = useRouter();
 
@@ -45,6 +46,7 @@ export default function Comment_Modal({ close }) {
     e.preventDefault();
     setIsLoading(true);
     setError("");
+    setSuccessMessage("");
 
     try {
       const response = await fetch(`/api/posts/${post.SLUG}/comments`, {
@@ -55,26 +57,42 @@ export default function Comment_Modal({ close }) {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Yorum eklenemedi.");
+        throw new Error(errorData.message || "Yorum eklenemedi");
       }
 
+      setSuccessMessage("Your message has been sent successfully");
+      setContent("");
+      setAuthor("");
+      setAvatar(avatars[0]);
       router.refresh();
-      close();
+
+      setTimeout(() => {
+        close();
+        setSuccessMessage("");
+      }, 2000);
     } catch (err) {
       setError(err.message);
     } finally {
-      setIsLoading(false);
+      if (successMessage) {
+      } else {
+        setIsLoading(false);
+      }
     }
   };
 
   return (
     <div>
       {error && (
-        <div className="bg-red-400/40 text-red-400 dark:bg-red-600/40 dark:text-red-200 font-semibold rounded-[20px] p-4 mb-4">
+        <div className="bg-skin-error-muted text-skin-error font-semibold rounded-[20px] p-4 mb-4">
           {error}
         </div>
       )}
-      <form onSubmit={handleSubmit}>
+      {successMessage && (
+        <div className="bg-skin-success-muted text-skin-success font-semibold rounded-[20px] p-4 mb-4">
+          {successMessage}
+        </div>
+      )}
+      <form className="space-y-4" onSubmit={handleSubmit}>
         <div className="flex items-center gap-2 mb-4 select-none">
           {!avatars.includes(avatar) ? (
             <div className="relative w-12 h-12">
@@ -115,10 +133,26 @@ export default function Comment_Modal({ close }) {
               alt={`Avatar ${index + 1}`}
               onClick={() => setAvatar(av)}
               className={`w-12 h-12 rounded-full cursor-pointer object-cover select-none border-2 ${
-                avatar === av ? "border-blue-500" : "border-transparent"
+                avatar === av ? "border-skin-secondary" : "border-transparent"
               }`}
             />
           ))}
+        </div>
+        <div className="flex items-center space-x-4 w-full p-4 bg-black/5 dark:bg-white/5 rounded-[20px]">
+          <img
+            className="size-12 rounded-full object-cover shrink-0"
+            alt="Selected Avatar"
+            src={avatar}
+          />
+          <input
+            onChange={(e) => setAuthor(e.target.value)}
+            placeholder="Name/Surname, Nickname"
+            className="w-full"
+            value={author}
+            name="author"
+            type="text"
+            id="author"
+          />
         </div>
         <div className="bg-black/5 dark:bg-white/5 rounded-[20px] min-h-64 overflow-hidden">
           <textarea
@@ -130,29 +164,13 @@ export default function Comment_Modal({ close }) {
             id="content"
             rows="12"
           />
-          <div className="flex items-center space-x-4 w-full p-4 border-t border-white dark:border-black">
-            <img
-              className="size-12 rounded-full object-cover shrink-0"
-              alt="Selected Avatar"
-              src={avatar}
-            />
-            <input
-              onChange={(e) => setAuthor(e.target.value)}
-              placeholder="Name/Surname, Nickname"
-              className="w-full"
-              value={author}
-              name="author"
-              type="text"
-              id="author"
-            />
-          </div>
-          <input
-            className="w-full cursor-pointer hover:bg-white/5 p-4 disabled:opacity-50 disabled:cursor-not-allowed border-t border-white dark:border-black"
-            value={isLoading ? "Your comment is being sent" : "Send comment"}
-            disabled={isLoading}
-            type="submit"
-          ></input>
         </div>
+        <input
+          className="w-full cursor-pointer bg-skin-primary text-white p-4 disabled:opacity-50 disabled:cursor-not-allowed rounded-[20px]"
+          value={isLoading ? "Your comment is being sent" : "Send comment"}
+          disabled={isLoading}
+          type="submit"
+        ></input>
       </form>
     </div>
   );

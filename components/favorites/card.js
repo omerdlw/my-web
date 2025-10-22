@@ -12,7 +12,7 @@ export function FavoriteCard({ item, onClick, section, isLast, isFirst }) {
         {
           "rounded-l-3xl": isFirst,
           "rounded-r-3xl": isLast,
-        }
+        },
       )}
     >
       <img

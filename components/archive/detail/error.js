@@ -1,5 +1,5 @@
-import Icon from "@/components/icon";
 import { useRouter } from "next/navigation";
+import Icon from "@/components/icon";
 
 export function ErrorState() {
   const router = useRouter();
@@ -7,8 +7,8 @@ export function ErrorState() {
     <div className="h-screen w-screen flex flex-col items-center justify-center text-center text-zinc-500 dark:text-zinc-400 bg-zinc-100 dark:bg-black px-4">
       <Icon
         icon="solar:sad-square-bold-duotone"
+        className="mb-4 text-skin-error"
         size={60}
-        className="mb-4 text-red-500"
       />
       <h2 className="text-xl font-semibold mb-2 text-black dark:text-white">
         Details Could Not Be Loaded

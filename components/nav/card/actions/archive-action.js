@@ -25,7 +25,7 @@ export default function ArchiveAction() {
             onClick={() => setMediaType(section.id)}
             className={`w-full h-12 cursor-pointer rounded-[20px] flex items-center justify-center gap-2 transition-colors ${
               mediaType === section.id
-                ? "bg-black/5 dark:bg-white/5"
+                ? "bg-skin-primary text-white"
                 : "hover:bg-black/10 dark:hover:bg-white/10"
             }`}
           >
@@ -34,7 +34,7 @@ export default function ArchiveAction() {
         ))}
       </div>
       <div
-        className="h-auto rounded-[20px] w-full py-3 px-4 bg-black/5 dark:bg-white/5"
+        className="h-auto rounded-[20px] w-full p-4 bg-black/5 dark:bg-white/5"
         onClick={(e) => e.stopPropagation()}
       >
         <input

@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 
+// Renk değişkenlerini Tailwind formatına çeviren yardımcı fonksiyon
 function withOpacity(variableName) {
   return ({ opacityValue }) => {
     if (opacityValue !== undefined) {
@@ -14,10 +15,13 @@ module.exports = {
   mode: "jit",
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    // "./contexts/**/*.{js,ts,jsx,tsx,mdx}", // Gerekirse ekle
   ],
   theme: {
     extend: {
+      // Renkleri CSS değişkenlerinden alacak şekilde tanımla
       textColor: {
         skin: {
           base: withOpacity("--color-text-base"),
@@ -37,13 +41,13 @@ module.exports = {
           secondary: withOpacity("--color-secondary"),
           accent: withOpacity("--color-accent"),
           success: withOpacity("--color-success"),
-          "success-muted": withOpacity("--color-success-muted"),
+          "success-muted": withOpacity("--color-success-muted"), // Soluk ton
           error: withOpacity("--color-error"),
-          "error-muted": withOpacity("--color-error-muted"),
+          "error-muted": withOpacity("--color-error-muted"), // Soluk ton
           warning: withOpacity("--color-warning"),
-          "warning-muted": withOpacity("--color-warning-muted"),
+          "warning-muted": withOpacity("--color-warning-muted"), // Soluk ton
           info: withOpacity("--color-info"),
-          "info-muted": withOpacity("--color-info-muted"),
+          "info-muted": withOpacity("--color-info-muted"), // Soluk ton
         },
       },
       borderColor: {
@@ -65,6 +69,14 @@ module.exports = {
           error: withOpacity("--color-error"),
           warning: withOpacity("--color-warning"),
           info: withOpacity("--color-info"),
+        },
+      },
+      gradientColorStops: {
+        // İsteğe bağlı: Gradient'ler için
+        skin: {
+          primary: withOpacity("--color-primary"),
+          secondary: withOpacity("--color-secondary"),
+          accent: withOpacity("--color-accent"),
         },
       },
     },
