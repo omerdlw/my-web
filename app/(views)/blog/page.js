@@ -1,5 +1,11 @@
 import BlogList from "@/components/blog/list";
 import { getAllPosts } from "@/lib/db/posts";
+import { Error } from "@/components/shared";
+
+export const metadata = {
+  title: "Blog",
+  description: "Read my latest blog posts",
+};
 
 export default async function BlogPage() {
   try {
@@ -11,11 +17,16 @@ export default async function BlogPage() {
       </div>
     );
   } catch (error) {
-    console.error("Blog gönderileri hatası:", error);
+    console.error("Error fetching blog posts:", error);
+
     return (
-      <div className="fixed w-screen h-screen inset-0 center bg-[#E9152D]/10 text-[#E9152D] text-lg">
-        An error occurred while fetching blog posts
-      </div>
+      <Error
+        title="Failed to Load Posts"
+        message="We couldn't load the blog posts. Please try again later."
+        fullScreen
+        showRetry
+        showGoBack
+      />
     );
   }
 }

@@ -8,108 +8,120 @@ import {
   useState,
   useMemo,
 } from "react";
+import { THEMES, VALID_THEMES, STORAGE_KEYS } from "@/config/constants";
+import { getStorageItem, setStorageItem } from "@/lib/utils";
 
-const STORAGE_KEY = "appSettings";
+const SettingsContext = createContext(undefined);
+
 const DEFAULT_SETTINGS = {
-  theme: "system",
+  theme: THEMES.SYSTEM,
 };
 
-const initialSettings = {
-  ...DEFAULT_SETTINGS,
-};
-
+/**
+ * Gets settings from localStorage with fallback to defaults
+ */
 const getStoredSettings = () => {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    return stored ? JSON.parse(stored) : initialSettings;
-  } catch (error) {
-    console.error("Failed to parse stored settings:", error);
-    return initialSettings;
-  }
+  const stored = getStorageItem(STORAGE_KEYS.SETTINGS);
+  return stored ? { ...DEFAULT_SETTINGS, ...stored } : DEFAULT_SETTINGS;
 };
 
+/**
+ * Saves settings to localStorage
+ */
 const saveSettings = (settings) => {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
-    return true;
-  } catch (error) {
-    console.error("Failed to save settings:", error);
-    return false;
-  }
+  return setStorageItem(STORAGE_KEYS.SETTINGS, settings);
 };
 
-const SettingsContext = createContext(null);
+/**
+ * Applies theme to document element
+ */
+const applyThemePreference = (theme) => {
+  if (typeof window === "undefined") return;
+
+  let effectiveTheme = theme;
+
+  if (theme === THEMES.SYSTEM) {
+    effectiveTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? THEMES.DARK
+      : THEMES.LIGHT;
+  }
+
+  document.documentElement.className = effectiveTheme;
+};
 
 export function SettingsProvider({ children }) {
-  const [settings, setSettings] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return getStoredSettings();
-    }
-    return initialSettings;
-  });
-  const [isInitialized, setIsInitialized] = useState(typeof window !== 'undefined');
+  const [settings, setSettings] = useState(DEFAULT_SETTINGS);
+  const [isInitialized, setIsInitialized] = useState(false);
 
+  // Initialize settings from localStorage on mount
   useEffect(() => {
-    if (!isInitialized) {
-      const storedSettings = getStoredSettings();
-      setSettings(storedSettings);
+    if (typeof window !== "undefined") {
+      setSettings(getStoredSettings());
       setIsInitialized(true);
     }
-  }, [isInitialized]);
+  }, []);
 
+  // Apply theme changes and listen to system preference changes
   useEffect(() => {
     if (!isInitialized) return;
 
-    const applyTheme = (selectedTheme) => {
-      if (selectedTheme === "system") {
-        const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
-          .matches
-          ? "dark"
-          : "light";
-        document.documentElement.className = systemTheme;
-      } else {
-        document.documentElement.className = selectedTheme;
-      }
-    };
+    applyThemePreference(settings.theme);
 
+    // Listen for system theme changes
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    const handleSystemThemeChange = (e) => {
-      if (settings.theme === "system") {
-        applyTheme("system");
+    const handleSystemThemeChange = () => {
+      if (settings.theme === THEMES.SYSTEM) {
+        applyThemePreference(THEMES.SYSTEM);
       }
     };
 
-    applyTheme(settings.theme);
     mediaQuery.addEventListener("change", handleSystemThemeChange);
-
     return () => {
       mediaQuery.removeEventListener("change", handleSystemThemeChange);
     };
   }, [settings.theme, isInitialized]);
 
-  const updateSettings = useCallback((key, value) => {
-    if (!key || typeof key !== "string") {
-      console.error("Invalid settings key:", key);
-      return false;
-    }
-
+  /**
+   * Updates settings and persists to localStorage
+   */
+  const updateSettings = useCallback((newSettings) => {
     setSettings((prev) => {
-      const newSettings = { ...prev, [key]: value };
-      saveSettings(newSettings);
-      return newSettings;
+      const updated = { ...prev, ...newSettings };
+      saveSettings(updated);
+      return updated;
     });
   }, []);
 
+  /**
+   * Sets theme with validation
+   */
   const setTheme = useCallback(
     (newTheme) => {
-      if (!["light", "dark", "system"].includes(newTheme)) {
-        console.error("Invalid theme:", newTheme);
-        return false;
+      if (!VALID_THEMES.includes(newTheme)) {
+        console.error(`Invalid theme: ${newTheme}`);
+        return;
       }
-      return updateSettings("theme", newTheme);
+      updateSettings({ theme: newTheme });
     },
-    [updateSettings]
+    [updateSettings],
   );
+
+  /**
+   * Toggles between light and dark theme
+   */
+  const toggleTheme = useCallback(() => {
+    const newTheme =
+      settings.theme === THEMES.DARK ? THEMES.LIGHT : THEMES.DARK;
+    setTheme(newTheme);
+  }, [settings.theme, setTheme]);
+
+  /**
+   * Resets settings to defaults
+   */
+  const resetSettings = useCallback(() => {
+    setSettings(DEFAULT_SETTINGS);
+    saveSettings(DEFAULT_SETTINGS);
+  }, []);
 
   const contextValue = useMemo(
     () => ({
@@ -117,9 +129,18 @@ export function SettingsProvider({ children }) {
       updateSettings,
       theme: settings.theme,
       setTheme,
+      toggleTheme,
+      resetSettings,
       isInitialized,
     }),
-    [settings, updateSettings, setTheme, isInitialized]
+    [
+      settings,
+      updateSettings,
+      setTheme,
+      toggleTheme,
+      resetSettings,
+      isInitialized,
+    ],
   );
 
   return (
@@ -129,10 +150,10 @@ export function SettingsProvider({ children }) {
   );
 }
 
-export const useSettings = () => {
+export function useSettings() {
   const context = useContext(SettingsContext);
-  if (!context) {
-    throw new Error("useSettings must be used within SettingsProvider");
+  if (context === undefined) {
+    throw new Error("useSettings must be used within a SettingsProvider");
   }
   return context;
-};
+}

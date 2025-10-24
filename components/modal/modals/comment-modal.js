@@ -1,6 +1,7 @@
 "use client";
 
 import Icon from "@/components/icon";
+import { ErrorMessage, SuccessMessage } from "@/components/shared";
 import { useDatabase } from "@/contexts/database-context";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -82,15 +83,9 @@ export default function Comment_Modal({ close }) {
 
   return (
     <div>
-      {error && (
-        <div className="bg-skin-error-muted text-skin-error font-semibold rounded-[20px] p-4 mb-4">
-          {error}
-        </div>
-      )}
+      {error && <ErrorMessage message={error} className="mb-4" />}
       {successMessage && (
-        <div className="bg-skin-success-muted text-skin-success font-semibold rounded-[20px] p-4 mb-4">
-          {successMessage}
-        </div>
+        <SuccessMessage message={successMessage} className="mb-4" />
       )}
       <form className="space-y-4" onSubmit={handleSubmit}>
         <div className="flex items-center gap-2 mb-4 select-none">

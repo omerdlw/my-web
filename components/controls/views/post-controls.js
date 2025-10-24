@@ -1,29 +1,73 @@
 import { useDatabase } from "@/contexts/database-context";
 import { useModal } from "@/contexts/modal-context";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import ControlsButton from "../button";
+import Icon from "@/components/icon";
+
+const generateUserId = () => {
+  try {
+    if (
+      typeof window !== "undefined" &&
+      window.crypto &&
+      window.crypto.randomUUID
+    ) {
+      return window.crypto.randomUUID();
+    }
+  } catch (e) {
+    console.error(
+      "crypto.randomUUID not available, falling back to Math.random.",
+    );
+  }
+  return (
+    Math.random().toString(36).substring(2, 15) +
+    Math.random().toString(36).substring(2, 15)
+  );
+};
+
+const getUserId = () => {
+  if (typeof window === "undefined") return null;
+  let userId = localStorage.getItem("userId");
+  if (!userId) {
+    userId = generateUserId();
+    localStorage.setItem("userId", userId);
+  }
+  return userId;
+};
 
 export default function PostControls() {
   const { openModal } = useModal();
   const { post } = useDatabase();
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
+  const [isLoadingLike, setIsLoadingLike] = useState(false);
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-    if (post) {
-      const userId = localStorage.getItem("userId");
-      setIsLiked(post.LIKES?.includes(userId));
-      setLikeCount(post.LIKES?.length || 0);
-    }
-  }, [post]);
+    setUserId(getUserId());
+  }, []);
 
-  const handleLike = async () => {
-    let userId = localStorage.getItem("userId");
-    if (!userId) {
-      userId =
-        Math.random().toString(36).substring(2, 15) +
-        Math.random().toString(36).substring(2, 15);
-      localStorage.setItem("userId", userId);
+  useEffect(() => {
+    if (post && userId) {
+      setIsLiked(post.LIKES?.includes(userId) ?? false);
+      setLikeCount(post.LIKES?.length || 0);
+    } else {
+      setIsLiked(false);
+      setLikeCount(post?.LIKES?.length || 0); // Post varsa like sayısını göster ama like durumunu false yap
+    }
+  }, [post, userId]);
+
+  const handleLike = useCallback(async () => {
+    if (!post || !userId || isLoadingLike) return;
+
+    setIsLoadingLike(true);
+    const originalIsLiked = isLiked;
+    const originalLikeCount = likeCount;
+
+    setIsLiked(!originalIsLiked);
+    setLikeCount(
+      originalIsLiked ? originalLikeCount - 1 : originalLikeCount + 1,
+    );
+    {
     }
 
     try {
@@ -33,36 +77,49 @@ export default function PostControls() {
         body: JSON.stringify({ userId }),
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        setIsLiked(data.likes.includes(userId));
-        setLikeCount(data.likeCount);
+      if (!response.ok) {
+        throw new Error("Like request failed");
       }
     } catch (error) {
       console.error("Like error:", error);
+      setIsLiked(originalIsLiked);
+      setLikeCount(originalLikeCount);
+    } finally {
+      setIsLoadingLike(false);
     }
-  };
+  }, [post, userId, isLoadingLike, isLiked, likeCount]);
 
   if (!post) {
     return null;
   }
 
   return (
-    <div className="w-full h-full flex space-x-3">
-      <div className="w-full h-full flex items-center justify-end space-x-3">
+    <div className="w-full h-full flex items-center pointer-events-auto space-x-4">
+      <div className="w-full flex items-center justify-end space-x-3">
         <ControlsButton
           onClick={handleLike}
-          icon={isLiked ? "solar:heart-bold" : "solar:heart-outline"}
-          text={likeCount + " likes"}
-          color={isLiked && "#E9152D"}
+          icon={
+            isLoadingLike
+              ? "mingcute:loading-3-fill"
+              : isLiked
+                ? "solar:heart-bold"
+                : "solar:heart-outline"
+          }
+          text={`${likeCount} likes`}
+          color={isLiked && !isLoadingLike ? "#E9152D" : undefined}
+          disabled={isLoadingLike || !userId}
+          loading={isLoadingLike}
         />
       </div>
       <div className="w-[400px] h-full shrink-0"></div>
-      <div className="w-full h-full flex items-center justify-start space-x-3">
+      <div className="w-full flex items-center justify-start space-x-3">
         <ControlsButton
           onClick={() => openModal("COMMENT_MODAL")}
-          icon={"solar:add-circle-bold"}
-          text={"Add comment"}
+          icon={"solar:chat-line-bold"}
+          description={
+            post.COMMENTS?.length > 0 ? `${post.COMMENTS.length} comments` : ""
+          }
+          text={post.COMMENTS?.length > 0 ? "Add comment" : "Add comment"}
         />
       </div>
     </div>

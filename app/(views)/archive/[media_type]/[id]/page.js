@@ -21,7 +21,6 @@ import {
 } from "lucide-react";
 import Icon from "@/components/icon";
 
-import { LoadingState } from "@/components/archive/detail/loading";
 import { ErrorState } from "@/components/archive/detail/error";
 import { EpisodeList } from "@/components/archive/detail/episode-list";
 import { Carousel } from "@/components/archive/detail/carousel";
@@ -29,6 +28,7 @@ import { RatingBadge } from "@/components/archive/detail/rating-badge";
 import { DetailItem } from "@/components/archive/detail/detail-item";
 import { Section } from "@/components/archive/detail/section";
 import { useModal } from "@/contexts/modal-context";
+import { Loading } from "@/components/shared";
 
 const TMDB_API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 const OMDB_API_KEY = process.env.NEXT_PUBLIC_OMDB_API_KEY;
@@ -57,7 +57,7 @@ export default function ArchiveDetailPage() {
 
       try {
         const tmdbRes = await fetch(
-          `https://api.themoviedb.org/3/${media_type}/${id}?api_key=${TMDB_API_KEY}&append_to_response=credits,videos,images,recommendations,similar,watch/providers,external_ids,keywords`
+          `https://api.themoviedb.org/3/${media_type}/${id}?api_key=${TMDB_API_KEY}&append_to_response=credits,videos,images,recommendations,similar,watch/providers,external_ids,keywords`,
         );
         if (!tmdbRes.ok) throw new Error(`TMDB API Error: ${tmdbRes.status}`);
         const tmdbData = await tmdbRes.json();
@@ -68,19 +68,19 @@ export default function ArchiveDetailPage() {
         if (media_type === "tv" && imdbId) {
           try {
             const tvmazeLookupRes = await fetch(
-              `https://api.tvmaze.com/lookup/shows?imdb=${imdbId}`
+              `https://api.tvmaze.com/lookup/shows?imdb=${imdbId}`,
             );
             if (tvmazeLookupRes.ok) {
               const tvmazeShowData = await tvmazeLookupRes.json();
               const episodesRes = await fetch(
-                `https://api.tvmaze.com/shows/${tvmazeShowData.id}/episodes`
+                `https://api.tvmaze.com/shows/${tvmazeShowData.id}/episodes`,
               );
               if (episodesRes.ok) {
                 const episodeData = await episodesRes.json();
                 setEpisodes(episodeData);
               } else {
                 console.warn(
-                  `Could not fetch TVmaze episodes for ID: ${tvmazeShowData.id}`
+                  `Could not fetch TVmaze episodes for ID: ${tvmazeShowData.id}`,
                 );
               }
             } else {
@@ -93,7 +93,7 @@ export default function ArchiveDetailPage() {
 
         if (imdbId) {
           const omdbRes = await fetch(
-            `https://www.omdbapi.com/?i=${imdbId}&apikey=${OMDB_API_KEY}`
+            `https://www.omdbapi.com/?i=${imdbId}&apikey=${OMDB_API_KEY}`,
           );
           if (!omdbRes.ok) throw new Error(`OMDB API Error: ${omdbRes.status}`);
           const omdbData = await omdbRes.json();
@@ -122,28 +122,28 @@ export default function ArchiveDetailPage() {
     ? createNavItem("archiveDetail", { details, media_type, id })
     : null;
 
-  if (loading) return <LoadingState />;
+  if (loading) return <Loading text={"Loading archive details"} fullScreen />;
   if (!details || details.success === false) return <ErrorState />;
 
   const title = details.title || details.name;
   const releaseDate = details.release_date || details.first_air_date;
   const year = releaseDate ? new Date(releaseDate).getFullYear() : "N/A";
   const trailer = details.videos?.results?.find(
-    (v) => v.type === "Trailer" && v.site === "YouTube"
+    (v) => v.type === "Trailer" && v.site === "YouTube",
   );
   const watchProviders = details["watch/providers"]?.results?.TR;
   const runtime = details.runtime
     ? `${Math.floor(details.runtime / 60)}h ${details.runtime % 60}m`
     : details.episode_run_time?.[0]
-    ? `${details.episode_run_time[0]}m`
-    : null;
+      ? `${details.episode_run_time[0]}m`
+      : null;
   const seasons = details.number_of_seasons
     ? `${details.number_of_seasons} Season${
         details.number_of_seasons > 1 ? "s" : ""
       }`
     : null;
   const director = details.credits?.crew?.find(
-    (person) => person.job === "Director"
+    (person) => person.job === "Director",
   );
   const writers = details.credits?.crew
     ?.filter((person) => person.department === "Writing")
@@ -416,14 +416,13 @@ export default function ArchiveDetailPage() {
                             src={
                               actor.profile_path
                                 ? `https://image.tmdb.org/t/p/w300${actor.profile_path}`
-                                : "/no-profile.png"
+                                : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
                             }
                             alt={actor.name}
                             className="w-full h-full object-cover transition duration-300"
                             loading="lazy"
                             onError={(e) => {
                               e.target.onerror = null;
-                              e.target.src = "/no-profile.png";
                             }}
                           />
                         </div>
@@ -454,7 +453,7 @@ export default function ArchiveDetailPage() {
                               {
                                 image: `https://image.tmdb.org/t/p/w780${img.file_path}`,
                               },
-                              "center"
+                              "center",
                             )
                           }
                           className="aspect-video overflow-hidden rounded-lg shadow-md bg-black/5 dark:bg-white/5 transition-all duration-300 group/item hover:shadow-lg relative"
@@ -483,7 +482,7 @@ export default function ArchiveDetailPage() {
                               {
                                 image: `https://image.tmdb.org/t/p/w300${img.file_path}`,
                               },
-                              "center"
+                              "center",
                             )
                           }
                           className="aspect-[2/3] overflow-hidden rounded-lg shadow-md bg-black/5 dark:bg-white/5 transition-all duration-300 group/item hover:shadow-lg relative"
@@ -566,7 +565,7 @@ export default function ArchiveDetailPage() {
                           router.push(
                             `/archive/${item.media_type || media_type}/${
                               item.id
-                            }`
+                            }`,
                           )
                         }
                       >
@@ -609,7 +608,7 @@ export default function ArchiveDetailPage() {
                           router.push(
                             `/archive/${item.media_type || media_type}/${
                               item.id
-                            }`
+                            }`,
                           )
                         }
                       >

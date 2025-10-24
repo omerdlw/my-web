@@ -7,8 +7,8 @@ export default function FavoritesAction() {
   const router = useRouter();
   const { selectedSection } = useFavorites();
 
-  const handleClick = (e) => {
-    e.stopPropagation();
+  const handleClick = (event) => {
+    event.stopPropagation();
     router.push("/archive");
   };
 

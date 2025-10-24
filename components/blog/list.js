@@ -3,53 +3,72 @@
 import { useNavigationContext } from "@/contexts/navigation-context";
 import { useMemo } from "react";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 export default function BlogList({ posts }) {
   const { searchQuery } = useNavigationContext();
 
   const filteredPosts = useMemo(() => {
-    if (!posts) return [];
+    if (!posts || posts.length === 0) {
+      return [];
+    }
     if (!searchQuery) {
       return posts;
     }
-    const lowercasedQuery = searchQuery.toLowerCase();
+    const lowercasedQuery = searchQuery.toLowerCase().trim();
+    if (!lowercasedQuery) {
+      return posts;
+    }
     return posts.filter(
       (post) =>
-        post.TITLE.toLowerCase().includes(lowercasedQuery) ||
-        post.CONTENT.toLowerCase().includes(lowercasedQuery)
+        post.TITLE?.toLowerCase().includes(lowercasedQuery) ||
+        post.CONTENT?.toLowerCase().includes(lowercasedQuery),
     );
   }, [posts, searchQuery]);
 
-  if (posts && posts.length > 0) {
+  if (!posts || posts.length === 0) {
     return (
-      <>
-        {filteredPosts.length > 0 ? (
-          filteredPosts.map((post) => (
-            <Link
-              href={`/blog/${post.SLUG}`}
-              className="flex items-center justify-between mb-6 bg-white/5 border border-black/10 dark:border-white/10 p-6 rounded-2xl transition-all hover:border-black/20 dark:hover:border-white/20"
-              key={post._id}
-            >
-              <article className="font-bold text-lg">{post.TITLE}</article>
-              <p className="opacity-75 text-sm">
-                {new Date(post.CREATED_AT).toLocaleDateString("en-US")}
-              </p>
-            </Link>
-          ))
-        ) : (
-          <div className="w-screen h-screen center">
-            <p className="text-lg opacity-75">
-              No results found for "{searchQuery}"
-            </p>
-          </div>
-        )}
-      </>
+      <div className="flex items-center justify-center h-[calc(100vh-200px)]">
+        <p className="text-lg opacity-75">Henüz yayınlanmış bir gönderi yok.</p>
+      </div>
+    );
+  }
+
+  if (filteredPosts.length === 0 && searchQuery) {
+    return (
+      <div className="flex items-center justify-center h-[calc(100vh-200px)]">
+        <p className="text-lg opacity-75 text-center">
+          "{searchQuery}" için sonuç bulunamadı.
+        </p>
+      </div>
     );
   }
 
   return (
-    <div className="fixed w-screen h-screen inset-0 center bg-[#1E6EF3]/10 text-[#1E6EF3] text-lg">
-      Gönderi verisine ulaşılamadı.
-    </div>
+    <>
+      {filteredPosts.map((post) => (
+        <Link
+          href={`/blog/${post.SLUG}`}
+          className={cn(
+            "flex items-center justify-between mb-6 p-6 rounded-2xl transition-all",
+            "bg-white/5 dark:bg-black/20", // Arka plan rengi ayarlandı
+            "border border-black/10 dark:border-white/10",
+            "hover:border-black/20 dark:hover:border-white/20 hover:bg-white/10 dark:hover:bg-black/30", // Hover efekti
+          )}
+          key={post._id || post.SLUG}
+        >
+          <article className="font-semibold text-lg">{post.TITLE}</article>
+          <p className="opacity-75 text-sm whitespace-nowrap pl-4">
+            {post.CREATED_AT
+              ? new Date(post.CREATED_AT).toLocaleDateString("tr-TR", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })
+              : ""}
+          </p>
+        </Link>
+      ))}
+    </>
   );
 }

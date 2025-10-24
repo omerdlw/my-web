@@ -1,13 +1,15 @@
 "use client";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useMemo } from "react";
 
-const DatabaseContext = createContext();
+const DatabaseContext = createContext(undefined);
 
-export function DatabaseProvider({ children, initialPost }) {
-  const [post, setPost] = useState(initialPost || null);
+export function DatabaseProvider({ children, initialPost = null }) {
+  const [post, setPost] = useState(initialPost);
+
+  const value = useMemo(() => ({ post, setPost }), [post]);
 
   return (
-    <DatabaseContext.Provider value={{ post, setPost }}>
+    <DatabaseContext.Provider value={value}>
       {children}
     </DatabaseContext.Provider>
   );
@@ -15,8 +17,8 @@ export function DatabaseProvider({ children, initialPost }) {
 
 export function useDatabase() {
   const context = useContext(DatabaseContext);
-  if (!context) {
-    throw new Error("Database Context ERROR");
+  if (context === undefined) {
+    throw new Error("useDatabase must be used within a DatabaseProvider");
   }
   return context;
 }

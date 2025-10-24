@@ -1,10 +1,16 @@
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { NAVIGATION_LINKS } from "../components/nav/constants";
 import { useNavigationContext } from "@/contexts/navigation-context";
 import { createNavItem } from "./use-nav-item";
 
 const SKELETON_ITEM = createNavItem("skeleton");
+const ARCHIVE_ITEM = createNavItem("archive");
+
+const baseLinks = NAVIGATION_LINKS.reduce((acc, link) => {
+  acc[link.name] = link;
+  return acc;
+}, {});
 
 export const useNavigation = () => {
   const { dynamicNavItem, expanded, setExpanded } = useNavigationContext();
@@ -15,116 +21,111 @@ export const useNavigation = () => {
   const isBlogPostPage =
     pathname.startsWith("/blog/") && pathname.length > "/blog/".length;
   const isArchiveDetailPage =
-    pathname.startsWith("/archive/") && pathname.split("/").length > 3;
+    pathname.startsWith("/archive/") &&
+    pathname.split("/").length > 2 &&
+    pathname.split("/")[2] !== "";
+  const isArchivePage = pathname === "/archive";
 
   const showSkeleton =
     (isBlogPostPage || isArchiveDetailPage) && !dynamicNavItem;
 
+  const handleNavigate = useCallback(
+    (href) => {
+      router.push(href);
+      setExpanded(false);
+    },
+    [router, setExpanded],
+  );
+
   useEffect(() => {
     if (!expanded) return;
-
-    const handleClickOutside = (e) => {
-      if (!document.getElementById("nav-card-stack")?.contains(e.target)) {
+    const handleClickOutside = (event) => {
+      if (!document.getElementById("nav-card-stack")?.contains(event.target)) {
         setExpanded(false);
       }
     };
-
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
   }, [expanded, setExpanded]);
 
   useEffect(() => {
-    NAVIGATION_LINKS.forEach((link) => {
-      try {
-        router.prefetch?.(link.href);
-      } catch {}
-    });
+    NAVIGATION_LINKS.forEach((link) => router.prefetch(link.href));
   }, [router]);
 
+  useEffect(() => {
+    setExpanded(false);
+  }, [pathname, setExpanded]);
+
   const navigationItems = useMemo(() => {
-    const homeLink = NAVIGATION_LINKS.find((link) => link.href === "/");
-    const blogLink = NAVIGATION_LINKS.find((link) => link.href === "/blog");
-    const favoritesLink = NAVIGATION_LINKS.find(
-      (link) => link.href === "/favorites"
-    );
-    const archiveLink = createNavItem("archive");
+    const { home, blog, favorites } = baseLinks;
 
     if (showSkeleton) {
-      return [SKELETON_ITEM, favoritesLink, blogLink, homeLink].filter(Boolean);
+      return [SKELETON_ITEM, favorites, blog, home].filter(Boolean);
     }
 
     if (dynamicNavItem) {
       if (isBlogPostPage) {
-        return [dynamicNavItem, blogLink, favoritesLink, homeLink].filter(
-          Boolean
-        );
+        return [dynamicNavItem, blog, favorites, home].filter(Boolean);
       }
       if (isArchiveDetailPage) {
-        return [
-          dynamicNavItem,
-          archiveLink,
-          favoritesLink,
-          blogLink,
-          homeLink,
-        ].filter(Boolean);
+        return [dynamicNavItem, ARCHIVE_ITEM, favorites, blog, home].filter(
+          Boolean,
+        );
       }
     }
 
-    if (pathname === "/archive") {
-      return [archiveLink, favoritesLink, blogLink, homeLink].filter(Boolean);
+    if (isArchivePage) {
+      return [ARCHIVE_ITEM, favorites, blog, home].filter(Boolean);
     }
 
     return NAVIGATION_LINKS;
   }, [
-    pathname,
     dynamicNavItem,
     showSkeleton,
     isBlogPostPage,
     isArchiveDetailPage,
+    isArchivePage,
   ]);
 
   const activeIndex = useMemo(() => {
-    if (showSkeleton) return 0;
+    if (showSkeleton || isBlogPostPage || isArchiveDetailPage) return 0;
 
-    if (isBlogPostPage || isArchiveDetailPage) {
-      return 0;
-    }
-
-    const currentPath = pathname.startsWith("/archive") ? "/archive" : pathname;
-    const idx = navigationItems.findIndex((l) => l.href === currentPath);
-    return idx >= 0 ? idx : 0;
+    const currentPath = isArchivePage ? "/archive" : pathname;
+    const index = navigationItems.findIndex(
+      (item) => item.href === currentPath,
+    );
+    return Math.max(0, index);
   }, [
     pathname,
     navigationItems,
     showSkeleton,
     isBlogPostPage,
     isArchiveDetailPage,
+    isArchivePage,
   ]);
 
   const activeItem = navigationItems[activeIndex];
-  const activeItemHasAction =
-    activeItem?.href === "/" ||
-    activeItem?.href.startsWith("/blog") ||
-    activeItem?.href === "/favorites" ||
-    activeItem?.href === "/archive";
 
-  const navigate = (href) => {
-    router.push(href);
-  };
+  const displayItems = useMemo(() => {
+    if (pathname === "/" || expanded || isHovered) {
+      return navigationItems;
+    }
+    return activeItem ? [activeItem] : [];
+  }, [pathname, expanded, isHovered, navigationItems, activeItem]);
 
-  useEffect(() => {
-    setExpanded(false);
-  }, [pathname, setExpanded]);
+  const activeItemHasAction = useMemo(
+    () =>
+      ["/", "/blog", "/favorites", "/archive"].includes(activeItem?.href) ||
+      activeItem?.href?.startsWith("/blog/"),
+    [activeItem],
+  );
 
   return {
     expanded,
     setExpanded,
     activeIndex,
-    navigate,
-    navigationItems:
-      pathname === "/" || expanded || isHovered
-        ? navigationItems
-        : [activeItem],
+    navigate: handleNavigate,
+    navigationItems: displayItems,
     activeItemHasAction,
     pathname,
     showSkeleton,

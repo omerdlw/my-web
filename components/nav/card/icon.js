@@ -1,9 +1,9 @@
-"use client";
-
 import Iconify from "@/components/icon";
 
 export const Icon = ({ icon }) => {
-  if (typeof icon === "string" && icon.startsWith("http")) {
+  const isUrl = typeof icon === "string" && icon.startsWith("http");
+
+  if (isUrl) {
     return (
       <div
         className="w-[52px] h-[52px] rounded-[20px] bg-cover bg-center bg-no-repeat"
