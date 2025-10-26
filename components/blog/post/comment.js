@@ -24,7 +24,7 @@ export default function Comment({ comment, isFirst, isLast }) {
   return (
     <div
       className={classNames(
-        "p-4 flex items-start space-x-4",
+        "p-4 flex items-start gap-4",
         "bg-white/60 dark:bg-black/20 backdrop-blur-lg",
         "border border-black/10 dark:border-white/10 border-b-0",
         {

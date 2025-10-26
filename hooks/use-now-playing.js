@@ -23,13 +23,13 @@ export function useNowPlaying(options = {}) {
     error: null,
   });
 
-  const isMountedRef = useRef(true);
   const abortControllerRef = useRef(null);
 
   /**
    * Fetches now playing data from Spotify API
    */
   const fetchData = useCallback(async () => {
+    console.log("[useNowPlaying] fetchData called");
     // Abort previous request if still pending
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
@@ -38,37 +38,54 @@ export function useNowPlaying(options = {}) {
     // Create new abort controller for this request
     abortControllerRef.current = new AbortController();
 
-    setState((prev) => ({
-      ...prev,
-      loading: !prev.data, // Only show loading on initial fetch
-      error: null,
-    }));
+    setState((prev) => {
+      console.log(
+        "[useNowPlaying] Setting loading state, prev.data:",
+        prev.data,
+      );
+      return {
+        ...prev,
+        loading: !prev.data, // Only show loading on initial fetch
+        error: null,
+      };
+    });
 
     try {
       const data = await getNowPlaying({
         signal: abortControllerRef.current.signal,
       });
 
-      if (isMountedRef.current && data) {
+      console.log("[useNowPlaying] getNowPlaying returned:", data);
+
+      if (data) {
+        console.log("[useNowPlaying] Setting data to state:", data);
         setState({
           data,
           loading: false,
           error: null,
         });
+      } else {
+        // If data is null but no error was thrown, still stop loading
+        console.log("[useNowPlaying] Data is null, stopping loading");
+        setState((prev) => ({
+          ...prev,
+          loading: false,
+        }));
       }
     } catch (err) {
       // Ignore abort errors
       if (err.name === "AbortError") {
+        console.log("[useNowPlaying] Request aborted");
         return;
       }
 
-      if (isMountedRef.current) {
-        setState((prev) => ({
-          ...prev,
-          loading: false,
-          error: err.message || "Failed to fetch now playing data",
-        }));
-      }
+      console.log("[useNowPlaying] Error caught:", err);
+
+      setState((prev) => ({
+        ...prev,
+        loading: false,
+        error: err.message || "Failed to fetch now playing data",
+      }));
 
       console.error("Error fetching now playing:", err);
     }
@@ -103,9 +120,7 @@ export function useNowPlaying(options = {}) {
 
     // Set up polling interval
     const intervalId = setInterval(() => {
-      if (isMountedRef.current) {
-        fetchData();
-      }
+      fetchData();
     }, refreshInterval);
 
     // Cleanup function
@@ -116,13 +131,6 @@ export function useNowPlaying(options = {}) {
       }
     };
   }, [enabled, refreshInterval, fetchData]);
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      isMountedRef.current = false;
-    };
-  }, []);
 
   return {
     // State

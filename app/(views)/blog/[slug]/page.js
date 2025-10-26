@@ -1,8 +1,8 @@
 import { getPostBySlug } from "@/lib/db/posts";
 import { notFound } from "next/navigation";
-import Post_Client from "./client";
+import Client from "./client";
 
-export default async function BlogPost({ params }) {
+export default async function Page({ params }) {
   const resolvedParams = await params;
   const { slug } = resolvedParams;
 
@@ -12,5 +12,5 @@ export default async function BlogPost({ params }) {
     notFound();
   }
 
-  return <Post_Client post={post} />;
+  return <Client post={post} />;
 }

@@ -21,12 +21,14 @@ module.exports = {
   ],
   theme: {
     extend: {
-      // Renkleri CSS değişkenlerinden alacak şekilde tanımla
+      borderRadius: {
+        primary: "30px",
+        secondary: "20px",
+        tertiary: "16px",
+      },
       textColor: {
         skin: {
-          base: withOpacity("--color-text-base"),
-          muted: withOpacity("--color-text-muted"),
-          accent: withOpacity("--color-accent"),
+          primary: withOpacity("--color-primary"),
           success: withOpacity("--color-success"),
           error: withOpacity("--color-error"),
           warning: withOpacity("--color-warning"),
@@ -35,26 +37,16 @@ module.exports = {
       },
       backgroundColor: {
         skin: {
-          base: withOpacity("--color-bg-base"),
-          muted: withOpacity("--color-bg-muted"),
           primary: withOpacity("--color-primary"),
-          secondary: withOpacity("--color-secondary"),
-          accent: withOpacity("--color-accent"),
           success: withOpacity("--color-success"),
-          "success-muted": withOpacity("--color-success-muted"), // Soluk ton
           error: withOpacity("--color-error"),
-          "error-muted": withOpacity("--color-error-muted"), // Soluk ton
           warning: withOpacity("--color-warning"),
-          "warning-muted": withOpacity("--color-warning-muted"), // Soluk ton
           info: withOpacity("--color-info"),
-          "info-muted": withOpacity("--color-info-muted"), // Soluk ton
         },
       },
       borderColor: {
         skin: {
-          base: withOpacity("--color-border"),
           primary: withOpacity("--color-primary"),
-          accent: withOpacity("--color-accent"),
           success: withOpacity("--color-success"),
           error: withOpacity("--color-error"),
           warning: withOpacity("--color-warning"),
@@ -64,7 +56,6 @@ module.exports = {
       ringColor: {
         skin: {
           primary: withOpacity("--color-primary"),
-          accent: withOpacity("--color-accent"),
           success: withOpacity("--color-success"),
           error: withOpacity("--color-error"),
           warning: withOpacity("--color-warning"),
@@ -72,11 +63,12 @@ module.exports = {
         },
       },
       gradientColorStops: {
-        // İsteğe bağlı: Gradient'ler için
         skin: {
           primary: withOpacity("--color-primary"),
-          secondary: withOpacity("--color-secondary"),
-          accent: withOpacity("--color-accent"),
+          success: withOpacity("--color-success"),
+          error: withOpacity("--color-error"),
+          warning: withOpacity("--color-warning"),
+          info: withOpacity("--color-info"),
         },
       },
     },

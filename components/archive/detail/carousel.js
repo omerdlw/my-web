@@ -100,7 +100,7 @@ export function Carousel({
     <div className="relative group">
       <div
         ref={scrollContainerRef}
-        className="flex flex-nowrap overflow-x-auto space-x-4 scrollbar-hide scroll-smooth py-1" // Biraz padding ekledik
+        className="flex flex-nowrap overflow-x-auto gap-4 scrollbar-hide scroll-smooth py-1" // Biraz padding ekledik
       >
         {items.map((item, index) => (
           <motion.div

@@ -1,12 +1,15 @@
 "use client";
 
 import { useNavigationContext } from "@/contexts/navigation-context";
-import Icon from "@/components/icon";
-import { useEffect, useRef } from "react";
+import classNames from "classnames";
+import dynamic from "next/dynamic";
+import { useEffect, useRef, useState } from "react";
 
-export default function SearchAction({ placeholder }) {
+function Component({ placeholder }) {
   const { searchQuery, setSearchQuery } = useNavigationContext();
+  const [focus, setFocus] = useState(false);
   const inputRef = useRef();
+  const containerRef = useRef();
 
   function handleFocus() {
     if (inputRef.current) {
@@ -14,11 +17,34 @@ export default function SearchAction({ placeholder }) {
     }
   }
 
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target)
+      ) {
+        setFocus(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div
-      className="h-auto rounded-[20px] mt-2.5 w-full flex items-center p-4 gap-3 bg-black/5 dark:bg-white/5"
+      ref={containerRef}
+      className={classNames(
+        "h-auto rounded-secondary mt-2.5 w-full flex items-center p-3 gap-3 border border-transparent bg-black/5 dark:bg-white/5",
+        {
+          "!border-skin-primary": focus,
+        },
+      )}
       onClick={(event) => {
         event.stopPropagation();
+        setFocus(true);
         handleFocus();
       }}
     >
@@ -29,7 +55,14 @@ export default function SearchAction({ placeholder }) {
         value={searchQuery}
         ref={inputRef}
         type="text"
+        onBlur={() => setFocus(false)}
+        onFocus={() => setFocus(true)}
       />
     </div>
   );
 }
+
+const SearchAction = dynamic(() => Promise.resolve(Component), {
+  ssr: false,
+});
+export default SearchAction;

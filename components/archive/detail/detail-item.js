@@ -5,7 +5,7 @@ export function DetailItem({ icon: IconComponent, label, value }) {
 
   return (
     <div className="py-1">
-      <div className="flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400 mb-0.5 uppercase tracking-wider font-medium">
+      <div className="flex items-center gap-2 text-xs opacity-75 mb-0.5 uppercase tracking-wider font-medium">
         {IconComponent && <IconComponent size={14} className="opacity-70" />}{" "}
         <span>{label}</span>
       </div>

@@ -1,18 +1,9 @@
-import { Geist, Inter, Montserrat } from "next/font/google";
+import { Geist, Inter, Montserrat, Poppins } from "next/font/google";
 
-const montserrat = Montserrat({
-  variable: "--font-montserrat",
+const montserrat = Poppins({
+  variable: "--font-poppin",
   subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
-const geist = Geist({
-  variable: "--font-geist",
-  subsets: ["latin"],
-});
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
-
-export { montserrat, geist, inter };
+export { montserrat };

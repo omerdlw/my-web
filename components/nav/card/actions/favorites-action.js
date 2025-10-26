@@ -1,11 +1,10 @@
-"use client"; // Bu satırı ekleyin
-
-import { useRouter } from "next/navigation";
 import { useFavorites } from "@/hooks/use-favorites";
+import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 
-export default function FavoritesAction() {
-  const router = useRouter();
+function Component() {
   const { selectedSection } = useFavorites();
+  const router = useRouter();
 
   const handleClick = (event) => {
     event.stopPropagation();
@@ -18,9 +17,8 @@ export default function FavoritesAction() {
 
   return (
     <div
-      className="h-auto rounded-[20px] mt-2.5 w-full flex items-center p-3 gap-3 bg-black/5 dark:bg-white/5 hover:bg-skin-primary group transition-colors duration-200 ease-linear"
+      className="h-auto rounded-secondary mt-2.5 w-full flex items-center p-3 gap-3 bg-black/5 dark:bg-white/5 hover:bg-skin-primary group transition-colors duration-200 ease-linear"
       onClick={handleClick}
-      style={{ cursor: "pointer" }}
     >
       <div className="w-full focus:outline-none text-center group-hover:text-white">
         view my archive
@@ -28,3 +26,8 @@ export default function FavoritesAction() {
     </div>
   );
 }
+
+const FavoritesAction = dynamic(() => Promise.resolve(Component), {
+  ssr: false,
+});
+export default FavoritesAction;

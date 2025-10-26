@@ -1,5 +1,4 @@
 import { useComponentSize } from "@/hooks/use-component-size";
-import PlayerAction from "./card/actions/player-action";
 import { useMemo, useState, useEffect } from "react";
 import PostAction from "./card/actions/post-action";
 import SearchAction from "./card/actions/search-action";
@@ -12,7 +11,8 @@ import { motion } from "framer-motion";
 import { Title } from "./card/title";
 import { Icon } from "./card/icon";
 import dynamic from "next/dynamic";
-import { SkeletonCard } from "./card/skeleton";
+import SpotifyAction from "./card/actions/spotify-action";
+import { NavCardSkeleton } from "../shared/skeletons";
 
 function CardComponent({
   link,
@@ -23,16 +23,18 @@ function CardComponent({
   onActionHeightChange,
   onMouseEnter,
   onMouseLeave,
+  isStackHovered,
 }) {
   const { offsetY: expandedOffsetY } = ANIMATION_CONFIG.expanded;
   const { offsetY: collapsedOffsetY, scale: collapsedScale } =
     ANIMATION_CONFIG.collapsed;
   const pathname = usePathname();
   const [isHovered, setIsHovered] = useState(false);
+  const [isIndividualHovered, setIsIndividualHovered] = useState(false);
   const [actionRef, actionSize] = useComponentSize();
 
   const ActionComponent = useMemo(() => {
-    if (pathname === "/" && link.href === "/") return <PlayerAction />;
+    if (pathname === "/" && link.href === "/") return <SpotifyAction />;
     if (pathname.includes("/blog/") && link.href === pathname)
       return <PostAction />;
     if (pathname === "/blog" && link.href === "/blog") return <SearchAction />;
@@ -62,14 +64,22 @@ function CardComponent({
           opacity: 1,
         }}
       >
-        <SkeletonCard />
+        <NavCardSkeleton />
       </motion.div>
     );
   }
 
   return (
     <motion.div
-      className="absolute left-1/2 -translate-x-1/2 w-full h-auto cursor-pointer rounded-[30px] bg-white/80 dark:bg-black/40 backdrop-blur-lg border-2 border-black/10 dark:border-white/10 hover:border-skin-primary p-3 transition-colors duration-200 ease-linear transform-gpu will-change-transform"
+      className={`absolute left-1/2 -translate-x-1/2 w-full h-auto cursor-pointer rounded-primary bg-white/80 dark:bg-black/40 backdrop-blur-lg border p-3 transition-colors duration-200 ease-linear transform-gpu will-change-transform ${
+        expanded
+          ? isIndividualHovered
+            ? "border-skin-primary"
+            : "border-black/10 dark:border-white/10"
+          : isStackHovered
+            ? "border-skin-primary"
+            : "border-black/10 dark:border-white/10"
+      }`}
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{
         opacity: 1,
@@ -90,10 +100,12 @@ function CardComponent({
       }}
       onClick={onClick}
       onMouseEnter={() => {
+        setIsIndividualHovered(true);
         setIsHovered(true);
         onMouseEnter?.();
       }}
       onMouseLeave={() => {
+        setIsIndividualHovered(false);
         setIsHovered(false);
         onMouseLeave?.();
       }}
@@ -101,7 +113,7 @@ function CardComponent({
     >
       <div className="flex items-center h-auto gap-3">
         <Icon icon={link.icon} />
-        <div className="flex-1 flex flex-col -space-y-1 overflow-hidden">
+        <div className="flex-1 flex flex-col -gap-1 overflow-hidden">
           <Title text={link.name} />
           <Description
             text={

@@ -82,13 +82,13 @@ export default function Comment_Modal({ close }) {
   };
 
   return (
-    <div>
+    <div className="p-3">
       {error && <ErrorMessage message={error} className="mb-4" />}
       {successMessage && (
         <SuccessMessage message={successMessage} className="mb-4" />
       )}
       <form className="space-y-4" onSubmit={handleSubmit}>
-        <div className="flex items-center gap-2 mb-4 select-none">
+        <div className="flex items-center space-x-2 select-none">
           {!avatars.includes(avatar) ? (
             <div className="relative w-12 h-12">
               <img
@@ -133,7 +133,7 @@ export default function Comment_Modal({ close }) {
             />
           ))}
         </div>
-        <div className="flex items-center space-x-4 w-full p-4 bg-black/5 dark:bg-white/5 rounded-[20px]">
+        <div className="flex items-center space-x-4 w-full p-4 bg-black/5 dark:bg-white/5 rounded-secondary">
           <img
             className="size-12 rounded-full object-cover shrink-0"
             alt="Selected Avatar"
@@ -149,7 +149,7 @@ export default function Comment_Modal({ close }) {
             id="author"
           />
         </div>
-        <div className="bg-black/5 dark:bg-white/5 rounded-[20px] min-h-64 overflow-hidden">
+        <div className="bg-black/5 dark:bg-white/5 rounded-secondary min-h-64 overflow-hidden">
           <textarea
             className="w-full min-h-full flex-1 bg-transparent resize-none p-4"
             onChange={(e) => setContent(e.target.value)}
@@ -161,7 +161,7 @@ export default function Comment_Modal({ close }) {
           />
         </div>
         <input
-          className="w-full cursor-pointer bg-skin-primary text-white p-4 disabled:opacity-50 disabled:cursor-not-allowed rounded-[20px]"
+          className="w-full cursor-pointer bg-skin-primary text-white p-4 disabled:opacity-50 disabled:cursor-not-allowed rounded-secondary"
           value={isLoading ? "Your comment is being sent" : "Send comment"}
           disabled={isLoading}
           type="submit"

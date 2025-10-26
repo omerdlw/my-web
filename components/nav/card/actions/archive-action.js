@@ -1,10 +1,9 @@
-"use client";
-
 import { useArchiveContext } from "@/contexts/archive-context";
 import SearchAction from "./search-action";
 import Icon from "@/components/icon";
+import dynamic from "next/dynamic";
 
-export default function ArchiveAction() {
+function Component() {
   const { mediaType, setMediaType } = useArchiveContext();
 
   const sections = [
@@ -14,16 +13,15 @@ export default function ArchiveAction() {
 
   return (
     <div
-      className="h-auto rounded-[20px] mt-2.5 w-full flex flex-col items-center gap-3"
+      className="h-auto rounded-secondary mt-2.5 w-full flex flex-col items-center"
       onClick={(event) => event.stopPropagation()}
     >
-      <SearchAction placeholder={"search in archive"} />
-      <div className="w-full flex items-center space-x-2">
+      <div className="w-full flex items-center gap-2">
         {sections.map((section) => (
           <button
             key={section.id}
             onClick={() => setMediaType(section.id)}
-            className={`w-full h-12 cursor-pointer rounded-[20px] flex items-center justify-center gap-2 transition-colors ${
+            className={`w-full h-12 cursor-pointer rounded-secondary flex items-center justify-center gap-2 transition-colors ${
               mediaType === section.id
                 ? "bg-skin-primary text-white"
                 : "hover:bg-black/10 dark:hover:bg-white/10"
@@ -33,6 +31,12 @@ export default function ArchiveAction() {
           </button>
         ))}
       </div>
+      <SearchAction placeholder={"search in archive"} />
     </div>
   );
 }
+
+const ArchiveAction = dynamic(() => Promise.resolve(Component), {
+  ssr: false,
+});
+export default ArchiveAction;

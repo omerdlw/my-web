@@ -95,7 +95,7 @@ export default function PostControls() {
 
   return (
     <div className="w-full h-full flex items-center pointer-events-auto space-x-4">
-      <div className="w-full flex items-center justify-end space-x-3">
+      <div className="w-full flex items-center justify-end gap-3">
         <ControlsButton
           onClick={handleLike}
           icon={
@@ -112,7 +112,7 @@ export default function PostControls() {
         />
       </div>
       <div className="w-[400px] h-full shrink-0"></div>
-      <div className="w-full flex items-center justify-start space-x-3">
+      <div className="w-full flex items-center justify-start gap-3">
         <ControlsButton
           onClick={() => openModal("COMMENT_MODAL")}
           icon={"solar:chat-line-bold"}

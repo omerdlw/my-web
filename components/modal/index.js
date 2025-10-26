@@ -57,7 +57,7 @@ const Modal = () => {
 
   if (modalType && !MODAL_COMPONENTS[modalType]) {
     console.error(
-      `Modal type "${modalType}" is not defined in MODAL_COMPONENTS.`
+      `Modal type "${modalType}" is not defined in MODAL_COMPONENTS.`,
     );
     return null;
   }
@@ -79,7 +79,7 @@ const Modal = () => {
             exit="hidden"
           />
           <motion.div
-            className="relative z-10 bg-white/40 dark:bg-black/40 backdrop-blur-xl rounded-[30px] border border-black/15 dark:border-white/15 p-3"
+            className="relative z-10 bg-white/40 dark:bg-black/40 backdrop-blur-xl rounded-primary border border-black/15 dark:border-white/15"
             variants={modalVariants}
             initial="hidden"
             animate="visible"

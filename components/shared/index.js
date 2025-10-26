@@ -11,4 +11,4 @@ export {
   WarningMessage,
   ErrorMessage,
   InfoMessage,
-} from "./message";
+} from "./messages";

@@ -6,7 +6,7 @@ import Icon from "@/components/icon";
 import { cn } from "@/lib/utils";
 
 const MESSAGE_CLASS =
-  "flex items-center gap-3 p-1 rounded-[20px] font-semibold";
+  "flex items-center gap-3 p-1 rounded-secondary font-semibold";
 
 export default function Error({
   icon = "solar:danger-circle-bold",
@@ -49,10 +49,8 @@ export default function Error({
         <div className="w-16 h-16 rounded-full bg-skin-error/10 flex items-center justify-center">
           <Icon icon={icon} size={32} className="text-skin-error" />
         </div>
-        <h2 className="text-2xl font-bold text-skin-base">{title}</h2>
-        {message && (
-          <p className="text-skin-muted leading-relaxed">{message}</p>
-        )}
+        <h2 className="text-2xl font-bold">{title}</h2>
+        {message && <p className=" leading-relaxed">{message}</p>}
         <div className="flex items-center gap-3 mt-4">
           {showRetry && (
             <button
@@ -74,9 +72,7 @@ export default function Error({
               onClick={handleGoBack}
               className={cn(
                 "px-6 py-2.5 rounded-xl font-medium",
-                "hover:bg-skin-muted active:scale-95",
                 "transition-all duration-200",
-                "border border-skin-base",
                 "flex items-center gap-2",
               )}
             >
@@ -95,17 +91,18 @@ export function ErrorMessage({ message, className }) {
     <div
       className={cn(
         MESSAGE_CLASS,
-        "bg-skin-error-muted border border-skin-error",
-        "text-skin-error",
+        "bg-skin-error/60 border border-skin-error text-skin-error",
         className,
       )}
       role="alert"
     >
-      <Icon
-        icon="solar:danger-circle-bold"
-        className="flex-shrink-0"
-        size={20}
-      />
+      <div className="size-10 bg-skin-error shrink-0 rounded-tertiary center">
+        <Icon
+          icon="solar:danger-circle-bold"
+          className="text-white"
+          size={20}
+        />
+      </div>
       <p className="leading-relaxed">{message}</p>
     </div>
   );
@@ -116,18 +113,16 @@ export function SuccessMessage({ message, className }) {
     <div
       className={cn(
         MESSAGE_CLASS,
-        "bg-skin-success-muted border border-skin-success",
+        "bg-skin-success/60 border border-skin-success",
         "text-skin-success",
         className,
       )}
       role="status"
     >
-      <Icon
-        icon="solar:check-circle-bold"
-        size={20}
-        className="flex-shrink-0 mt-0.5"
-      />
-      <p className="text-sm leading-relaxed">{message}</p>
+      <div className="size-10 bg-skin-success shrink-0 rounded-tertiary center">
+        <Icon icon="solar:check-circle-bold" size={20} className="text-white" />
+      </div>
+      <p className="leading-relaxed">{message}</p>
     </div>
   );
 }
@@ -137,18 +132,20 @@ export function WarningMessage({ message, className }) {
     <div
       className={cn(
         MESSAGE_CLASS,
-        "bg-skin-warning-muted border border-skin-warning",
+        "bg-skin-warning/60 border border-skin-warning",
         "text-skin-warning",
         className,
       )}
       role="alert"
     >
-      <Icon
-        icon="solar:danger-triangle-bold"
-        size={20}
-        className="flex-shrink-0 mt-0.5"
-      />
-      <p className="text-sm leading-relaxed">{message}</p>
+      <div className="size-10 bg-skin-warning shrink-0 rounded-tertiary center">
+        <Icon
+          icon="solar:danger-triangle-bold"
+          className="text-white"
+          size={20}
+        />
+      </div>
+      <p className="leading-relaxed">{message}</p>
     </div>
   );
 }
@@ -158,17 +155,15 @@ export function InfoMessage({ message, className }) {
     <div
       className={cn(
         MESSAGE_CLASS,
-        "bg-skin-info-muted border border-skin-info",
+        "bg-skin-info/60 border border-skin-info",
         "text-skin-info",
         className,
       )}
       role="status"
     >
-      <Icon
-        icon="solar:info-circle-bold"
-        size={20}
-        className="flex-shrink-0 mt-0.5"
-      />
+      <div className="size-10 bg-skin-info shrink-0 rounded-tertiary center">
+        <Icon icon="solar:info-circle-bold" className="text-white" size={20} />
+      </div>
       <p className="text-sm leading-relaxed">{message}</p>
     </div>
   );

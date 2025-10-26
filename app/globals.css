@@ -3,83 +3,41 @@
 @variant dark (&:where(.dark, .dark *));
 
 :root {
-    --color-primary: 210 100% 56%; /* Parlak mavi #1c8cfc */
-    --color-secondary: 220 90% 48%; /* Koyu mavi #0d5fcc */
-    --color-accent: 190 95% 50%; /* Turkuaz vurgu #06c9f5 */
-    --color-text-base: 215 25% 15%; /* Koyu lacivert metin */
-    --color-text-muted: 215 15% 50%; /* Gri-mavi metin */
-    --color-bg-base: 0 0% 100%; /* Beyaz */
-    --color-bg-muted: 210 40% 98%; /* Çok açık mavi-beyaz */
-    --color-border: 210 30% 90%; /* Açık mavi-gri */
+    --color-primary: 217, 89%, 61%; /* Parlak mavi #1c8cfc */
     --color-success: 142 71% 45%; /* Yeşil */
     --color-error: 0 84% 60%; /* Yumuşak kırmızı */
     --color-warning: 38 92% 50%; /* Turuncu */
-    --color-info: 210 100% 56%; /* Primary ile aynı */
-    --color-success-muted: 142 50% 95%; /* Açık yeşil */
-    --color-error-muted: 0 70% 97%; /* Açık kırmızı */
-    --color-warning-muted: 38 90% 95%; /* Açık turuncu */
-    --color-info-muted: 210 100% 96%; /* Açık mavi */
+    --color-info: 217, 89%, 61%; /* Parlak mavi #1c8cfc */
 }
 
 .dark {
-    --color-primary: 210 100% 60%; /* Parlak mavi */
-    --color-secondary: 220 85% 55%; /* Orta mavi */
-    --color-accent: 190 90% 55%; /* Parlak turkuaz */
-    --color-text-base: 210 40% 98%; /* Çok açık mavi-beyaz */
-    --color-text-muted: 215 20% 65%; /* Gri-mavi */
-    --color-bg-base: 220 40% 8%; /* Derin lacivert */
-    --color-bg-muted: 218 35% 13%; /* Açık lacivert */
-    --color-border: 217 30% 20%; /* Koyu mavi-gri */
+    --color-primary: 217, 89%, 76%; /* Parlak mavi */
     --color-success: 142 70% 50%; /* Parlak yeşil */
     --color-error: 0 80% 65%; /* Parlak kırmızı */
     --color-warning: 38 90% 60%; /* Parlak turuncu */
-    --color-info: 210 100% 60%; /* Primary ile aynı */
-    --color-success-muted: 142 45% 18%; /* Koyu yeşil arka plan */
-    --color-error-muted: 0 60% 20%; /* Koyu kırmızı arka plan */
-    --color-warning-muted: 38 70% 22%; /* Koyu turuncu arka plan */
-    --color-info-muted: 210 70% 22%; /* Koyu mavi arka plan */
+    --color-info: 217, 89%, 76%; /* Parlak mavi */
 }
 
 @theme {
-    --color-skin-base: hsl(var(--color-text-base));
-    --color-skin-muted: hsl(var(--color-text-muted));
-    --color-skin-accent: hsl(var(--color-accent));
+    --color-skin-primary: hsl(var(--color-primary));
     --color-skin-success: hsl(var(--color-success));
     --color-skin-error: hsl(var(--color-error));
     --color-skin-warning: hsl(var(--color-warning));
     --color-skin-info: hsl(var(--color-info));
-    --color-skin-primary: hsl(var(--color-primary));
-    --color-skin-secondary: hsl(var(--color-secondary));
-    --color-skin-success-muted: hsl(var(--color-success-muted));
-    --color-skin-error-muted: hsl(var(--color-error-muted));
-    --color-skin-warning-muted: hsl(var(--color-warning-muted));
-    --color-skin-info-muted: hsl(var(--color-info-muted));
 }
 
 @theme {
-    --color-bg-skin-base: hsl(var(--color-bg-base));
-    --color-bg-skin-muted: hsl(var(--color-bg-muted));
     --color-bg-skin-primary: hsl(var(--color-primary));
-    --color-bg-skin-secondary: hsl(var(--color-secondary));
-    --color-bg-skin-accent: hsl(var(--color-accent));
     --color-bg-skin-success: hsl(var(--color-success));
-    --color-bg-skin-success-muted: hsl(var(--color-success-muted));
     --color-bg-skin-error: hsl(var(--color-error));
-    --color-bg-skin-error-muted: hsl(var(--color-error-muted));
     --color-bg-skin-warning: hsl(var(--color-warning));
-    --color-bg-skin-warning-muted: hsl(var(--color-warning-muted));
     --color-bg-skin-info: hsl(var(--color-info));
-    --color-bg-skin-info-muted: hsl(var(--color-info-muted));
 }
 
 @theme {
-    --color-border-skin-base: hsl(var(--color-border));
-    --color-border-skin-primary: hsl(var(--color-primary));
-    --color-border-skin-accent: hsl(var(--color-accent));
-    --color-border-skin-success: hsl(var(--color-success));
-    --color-border-skin-error: hsl(var(--color-error));
-    --color-border-skin-warning: hsl(var(--color-warning));
-    --color-border-skin-info: hsl(var(--color-info));
+    --radius-primary: 30px;
+    --radius-secondary: 20px;
+    --radius-tertiary: 16px;
 }
 
 * {

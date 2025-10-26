@@ -156,12 +156,12 @@ export const DATE_FORMATS = {
 // ============================================================================
 
 export const ERROR_MESSAGES = {
-  GENERIC: "An unexpected error occurred. Please try again.",
-  NETWORK: "Network error. Please check your connection.",
-  NOT_FOUND: "The requested resource was not found.",
-  UNAUTHORIZED: "You are not authorized to perform this action.",
-  VALIDATION: "Please check your input and try again.",
-  SERVER: "A server error occurred. Please try again later.",
+  GENERIC: "An unexpected error occurred. Please try again",
+  NETWORK: "Network error. Please check your connection",
+  NOT_FOUND: "The requested resource was not found",
+  UNAUTHORIZED: "You are not authorized to perform this action",
+  VALIDATION: "Please check your input and try again",
+  SERVER: "A server error occurred. Please try again later",
 };
 
 // ============================================================================
@@ -169,11 +169,11 @@ export const ERROR_MESSAGES = {
 // ============================================================================
 
 export const SUCCESS_MESSAGES = {
-  POST_CREATED: "Post created successfully!",
-  POST_UPDATED: "Post updated successfully!",
-  POST_DELETED: "Post deleted successfully!",
-  COMMENT_ADDED: "Comment added successfully!",
-  SETTINGS_SAVED: "Settings saved successfully!",
+  POST_CREATED: "Post created successfully",
+  POST_UPDATED: "Post updated successfully",
+  POST_DELETED: "Post deleted successfully",
+  COMMENT_ADDED: "Comment added successfully",
+  SETTINGS_SAVED: "Settings saved successfully",
 };
 
 // ============================================================================

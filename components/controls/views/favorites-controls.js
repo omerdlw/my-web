@@ -15,7 +15,7 @@ export default function FavoritesControls() {
 
   return (
     <div className="w-full h-full flex items-center pointer-events-auto space-x-4">
-      <div className="w-full flex items-center justify-end space-x-3">
+      <div className="w-full flex items-center justify-end gap-3">
         {previousSection && (
           <ControlsButton
             text={capitalizeFirstLetter(previousSection)}
@@ -25,7 +25,7 @@ export default function FavoritesControls() {
         )}
       </div>
       <div className="w-[300px] h-full shrink-0"></div>
-      <div className="w-full flex items-center justify-start space-x-3">
+      <div className="w-full flex items-center justify-start gap-3">
         {nextSection && (
           <ControlsButton
             onClick={() => onSectionChange(nextSection, true)}

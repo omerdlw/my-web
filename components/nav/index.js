@@ -21,6 +21,7 @@ export default function Nav() {
   } = useNavigation();
 
   const [actionHeight, setActionHeight] = useState(0);
+  const [isStackHovered, setIsStackHovered] = useState(false);
   const baseCardHeight = 75;
 
   const containerHeight =
@@ -48,7 +49,7 @@ export default function Nav() {
           "fixed bottom-4 left-1/2 -translate-x-2/4 w-[300px] mx-auto z-50 select-none",
           {
             "w-[400px]": pathname.includes("/blog/") || showSkeleton,
-          }
+          },
         )}
         id="nav-card-stack"
       >
@@ -75,17 +76,24 @@ export default function Nav() {
                       : isTop && setExpanded(true))
                   }
                   onActionHeightChange={isTop ? setActionHeight : null}
-                  onMouseEnter={() =>
-                    isTop && pathname !== "/" && setIsHovered(true)
-                  }
-                  onMouseLeave={() =>
-                    isTop && pathname !== "/" && setIsHovered(false)
-                  }
+                  onMouseEnter={() => {
+                    if (isTop) {
+                      setIsStackHovered(true);
+                      pathname !== "/" && setIsHovered(true);
+                    }
+                  }}
+                  onMouseLeave={() => {
+                    if (isTop) {
+                      setIsStackHovered(false);
+                      pathname !== "/" && setIsHovered(false);
+                    }
+                  }}
                   expanded={expanded}
                   position={position}
                   key={link.href}
                   isTop={isTop}
                   link={link}
+                  isStackHovered={isStackHovered}
                 />
               );
             })}

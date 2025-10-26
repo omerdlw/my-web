@@ -1,5 +1,5 @@
-import Loading from "@/components/shared/loading";
+import { FavoritesSkeleton } from "@/components/shared/skeletons";
 
 export default function FavoritesLoading() {
-  return <Loading fullScreen />;
+  return <FavoritesSkeleton />;
 }

@@ -1,28 +1,21 @@
-import BlogList from "@/components/blog/list";
 import { getAllPosts } from "@/lib/db/posts";
 import { Error } from "@/components/shared";
+import Client from "./client";
 
 export const metadata = {
-  title: "Blog",
   description: "Read my latest blog posts",
+  title: "Blog",
 };
 
-export default async function BlogPage() {
+export default async function Page() {
   try {
     const posts = await getAllPosts();
-
-    return (
-      <div className="max-w-4xl mx-auto py-8 px-4">
-        <BlogList posts={posts} />
-      </div>
-    );
+    return <Client posts={posts} />;
   } catch (error) {
-    console.error("Error fetching blog posts:", error);
-
     return (
       <Error
+        message="We couldn't load the blog posts. Please try again later"
         title="Failed to Load Posts"
-        message="We couldn't load the blog posts. Please try again later."
         fullScreen
         showRetry
         showGoBack

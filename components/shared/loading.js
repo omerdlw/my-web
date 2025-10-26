@@ -44,11 +44,11 @@ export function LoadingSpinner({ size = 20, className }) {
 
 export function LoadingSkeleton({ className, count = 1 }) {
   return (
-    <div className={cn("space-y-3", className)}>
+    <div className={cn("gap-3", className)}>
       {Array.from({ length: count }).map((_, i) => (
         <div
           key={i}
-          className="h-4 bg-skin-muted animate-pulse rounded"
+          className="h-4 animate-pulse rounded"
           style={{ width: `${Math.random() * 40 + 60}%` }}
         />
       ))}
@@ -58,17 +58,12 @@ export function LoadingSkeleton({ className, count = 1 }) {
 
 export function LoadingCard({ className }) {
   return (
-    <div
-      className={cn(
-        "p-6 border border-skin-base rounded-2xl space-y-4",
-        className,
-      )}
-    >
-      <div className="h-6 bg-skin-muted animate-pulse rounded w-3/4" />
-      <div className="space-y-2">
-        <div className="h-4 bg-skin-muted animate-pulse rounded" />
-        <div className="h-4 bg-skin-muted animate-pulse rounded w-5/6" />
-        <div className="h-4 bg-skin-muted animate-pulse rounded w-4/6" />
+    <div className={cn("p-6 border rounded-2xl gap-4", className)}>
+      <div className="h-6 animate-pulse rounded w-3/4" />
+      <div className="gap-2">
+        <div className="h-4 animate-pulse rounded" />
+        <div className="h-4 animate-pulse rounded w-5/6" />
+        <div className="h-4 animate-pulse rounded w-4/6" />
       </div>
     </div>
   );

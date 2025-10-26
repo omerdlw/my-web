@@ -1,5 +1,5 @@
-import Loading from "@/components/shared/loading";
+import { BlogListSkeleton } from "@/components/shared/skeletons";
 
 export default function BlogLoading() {
-  return <Loading fullScreen />;
+  return <BlogListSkeleton count={15} />;
 }

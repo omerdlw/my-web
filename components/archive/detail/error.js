@@ -12,7 +12,7 @@ export function ErrorState({
     if (window.history.length > 1) {
       router.back();
     } else {
-      router.push("/"); // Veya başka bir varsayılan sayfa
+      router.push("/");
     }
   };
 
@@ -31,7 +31,7 @@ export function ErrorState({
       </p>
       <button
         onClick={handleGoBack}
-        className="mt-6 bg-black/10 hover:bg-black/20 dark:bg-white/10 dark:hover:bg-white/20 text-black dark:text-white px-5 py-2.5 rounded-lg transition-colors font-medium" // padding ve font ayarlandı
+        className="mt-6 bg-black/10 hover:bg-black/20 dark:bg-white/10 dark:hover:bg-white/20 text-black dark:text-white px-5 py-2.5 rounded-2xl transition-colors font-medium" // padding ve font ayarlandı
       >
         Go Back
       </button>
